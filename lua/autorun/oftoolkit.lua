@@ -14,9 +14,9 @@ CreateConVar( "of_drawwm", "1", 0, "" )		--第三人称模型
 CreateConVar( "of_skybox", "1", 0, "" )		--隐藏地图细节
 CreateConVar( "of_drawhud", "1", 0, "" )	--显示多余元素
 CreateConVar( "of_thirdperson", "1", 0, "" )	--显示第三人称模型
-CreateConVar( "of_setasrespawn", "0",{ FCVAR_ARCHIVE }, "" )	--死后设为出生点
-CreateConVar( "of_spawngod", "0",{ FCVAR_ARCHIVE }, "" )	--3秒无敌
-CreateConVar( "of_explodafterdeath", "0",{ FCVAR_ARCHIVE }, "" )	--死后原地爆炸
+CreateConVar( "of_setasrespawn", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )	--死后设为出生点
+CreateConVar( "of_spawngod", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )	--3秒无敌
+CreateConVar( "of_explodafterdeath", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )	--死后原地爆炸
 --CreateConVar( "of_allowweaponsinvehicle", "0", 0, "" )	--载具允许武器
 
 --CreateConVar( "nb_stop", "1", 0, "" )		--NEXTBOT
@@ -131,12 +131,18 @@ concommand.Add( "of_deleteplayerspawn", function( ply ) --删除它们
 	ply:ChatPrint("出生点已被删除")
 end)
 
-hook.Add("PlayerSpawn", "of_setlastplacasrespawn", function( ply )  --死后自动保存位置为出生点
+hook.Add("PlayerDeath", "of_setlastplacasrespawnhook1", function( ply )
 	if( GetConVarNumber( "of_setasrespawn" ) == 1 ) then
+		hook.Add("PlayerSpawn", "of_setlastplacasrespawnhook2", function( ply )  --死后自动保存位置为出生点
+			
 
-		ply:SetPos( LastPlace )	
-		
-	else end
+			ply:SetPos( LastPlace )	
+				
+			
+		end)
+	else
+		hook.Remove("PlayerSpawn", "of_setlastplacasrespawnhook2")
+	end
 end)
 
 hook.Add("PlayerSpawn", "of_spawngodhook", function( ply ) --无敌3秒

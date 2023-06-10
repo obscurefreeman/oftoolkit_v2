@@ -48,7 +48,7 @@ local helpentries = {
     
     本工具箱支持大多数常用功能，现在你可以仅在一个地方管理和控制游戏和画面
     普通Gmod玩家，玩战役图的博主，动画制作者，插件作者，
-    都能快速在其中找到自己想要的功能。
+    都能快速在其中找到自己想要的功能
     
     本工具箱的制作主旨是把大多数常用的重要功能集中在一起，
     给玩家提供一个方便快捷的管理界面。
@@ -56,23 +56,14 @@ local helpentries = {
     工具箱提供两种使用方式，如果你觉得使用DMenu太麻烦的话可以打开窗口
     （就是你现在眼前的窗口，可以通过C键菜单或Dmenu唤出）
     个人觉得用窗口比较方便，不过窗口目前还没完全开发好。以后还会有新功能加入
-    而且这两个方法的功能是不统一的。
+    而且这两个方法的功能是不统一的
 
-    工具箱会支持一些基本插件，其中包括我常用的插件和某些热门插件。
+    工具箱会支持一些基本插件，其中包括我常用的插件和某些热门插件
     当然。如果你不喜欢这些插件你也可以不订阅，这不是必须的！！
 
-    我想做这样的快捷工具箱已经很久了，目前我还在不断完善它的代码。
+    我想做这样的快捷工具箱已经很久了，目前我还在不断完善它的代码
 
     
-    ]],
-    ["使用须知"] = [[
-    
-    本插件暂且不支持多人联机。
-    “重载模组”按钮点击后有一秒钟的延迟，
-    这允许你在一秒内点击win键可以切出游戏，让游戏在后台载入。
-    （这是人性化的设置，因为你可以切出去看B站，不用死盯着进度条了，
-    Gmod载入时会有一段时间不能切出去）
-    带有星号（*）的选项需要订阅第三方插件，这些插件不是必须订阅的。
     ]],
     ["关于插件"] = [[
     
@@ -80,7 +71,14 @@ local helpentries = {
     部分字体使用了可商用字体：梦源黑体，此字体可以自由传播、分享或嵌入。
     (不过目前字体导入后只有英文能显示为这个字体，具体情况还在研究)
 
+    “重载模组”按钮点击后有一秒钟的延迟，
+    这允许你在一秒内点击win键可以切出游戏，让游戏在后台载入。
+    （这是人性化的设置，因为你可以切出去看B站，不用死盯着进度条了，
+    Gmod载入时会有一段时间不能切出去）
+    带有星号（*）的选项需要订阅第三方插件，这些插件不是必须订阅的。
+
     本工具箱的代码目前并不完善，我只能保证在单人模式中不会出问题。
+    多人模式中部分功能必须开启作弊才能使用
     更多功能正在制作中。。。
 
 
@@ -100,16 +98,20 @@ local helpentries = {
 
 
 
-if of_menu then of_menu:Remove() end    --菜单主体
-of_menu=nil 
-concommand.Add("of_menu",function (ply)
-    if of_menu then of_menu:Remove()end
+//if of_menu then of_menu:Remove() end    --菜单主体
+//of_menu=nil 
+local function of_menu_open( )
+    //if of_menu then of_menu:Remove()end
     local of_menu = vgui.Create("DFrame")
     of_menu:SetSize(800*xx, 600*yy)
     of_menu:Center()
-    of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.1（暂不支持多人联机）")    --因为没搞网络相关的代码(≧∇≦)ﾉ
+    of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.6")
     of_menu:SetDraggable(true)
     of_menu:MakePopup()
+    surface.PlaySound("of_ui/ui_click_confirm1.wav")
+    function of_menu :OnClose()
+        surface.PlaySound("of_ui/ui_click_confirm2.wav")
+    end
     of_menu.Paint = function(self, w, h)
         -- Draws a rounded box with the color faded_black stored above.
         draw.RoundedBox(8, 0, 0, w, h, faded_black)
@@ -207,6 +209,10 @@ concommand.Add("of_menu",function (ply)
     ofmwellcomeud:DockPadding(8, 4, 8, 4)
     ofmwellcomeud:SetSize(xxp, yyp/3) 
     ofmwellcomeud:InsertColorChange( 255, 255, 255, 255 )
+    ofmwellcomeud:AppendText("2023.6.5 \n小型更新发布，支持SAII\n")
+    ofmwellcomeud:AppendText("2023.5.28 \n中型更新发布，完善了帮助界面，易用性提升，增加了不少新功能（包括对一些常用模组的支持）\n增加界面UI音效,优化使用体验\n另外目前新地图的制作由于技术限制和个人准备考试暂停\n")
+    ofmwellcomeud:AppendText("2023.4.3 \n加入了在车内开火和死后原地爆炸的选项，调整部分选项\n")
+    ofmwellcomeud:AppendText("2023.4.1 \n工具箱已发布\n")
     ofmwellcomeud:AppendText("2023.3.30 \n晦弗工具箱V2代码基本定型，不过其主要功能尚且和一代出入不多，\n我准备慢慢完善并加入一些让人眼前一亮的新功能\n")
     ofmwellcomeud:AppendText("2023.3.25 \n完善了Dmenu上的图标，着手制作工具箱窗口\n")
     ofmwellcomeud:AppendText("2023.3.11 \n《酒店突袭：机场解围》发布\n")
@@ -254,7 +260,8 @@ concommand.Add("of_menu",function (ply)
     end
     local function ofm_clear()
         ofmpanel:Clear()
-        --surface.PlaySound("ambient/water/drip"..math.random(1, 4)..".wav")
+        surface.PlaySound("of_ui/ui_click_short1.wav")
+        --surface.PlaySound("of_ui/ui_click_short" .. math.random(1, 2) .. ".wav")
         --ofmpanel1:Clear()
         --ofmpanel2:Clear()
         --[[
@@ -328,6 +335,18 @@ concommand.Add("of_menu",function (ply)
 	    ofmwarmvcballowweaponsinvehicle:SetConVar("of_allowweaponsinvehicle")										
 	    ofmwarmvcballowweaponsinvehicle:SizeToContents()
 
+        local ofmwarmvcbarc9rs = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarmvcbarc9rs:Dock(TOP)
+        ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)					
+	    ofmwarmvcbarc9rs:SetText("ARC9替换地面武器")
+        ofmwarmvcbarc9rs:SetTextColor(whitetext)
+        ofmwarmvcbarc9rs:SetFont("oftext")				
+	    ofmwarmvcbarc9rs:SetConVar("arc9_replace_spawned")										
+	    ofmwarmvcbarc9rs:SizeToContents()
+
+
+        
+
         local ofmwarmv1_1 = vgui.Create("DLabel", ofmpanel1)
         ofmwarmv1_1:Dock(TOP)
         ofmwarmv1_1:DockMargin(2, 8, 2, 8)
@@ -354,14 +373,72 @@ concommand.Add("of_menu",function (ply)
 	    ofmwarmvcbparachute:SetConVar("vwarzone_enableparachute")										
 	    ofmwarmvcbparachute:SizeToContents()
 
+        local ofmwarmv1_2 = vgui.Create("DLabel", ofmpanel1)
+        ofmwarmv1_2:Dock(TOP)
+        ofmwarmv1_2:DockMargin(2, 8, 2, 8)
+        ofmwarmv1_2:SetText("快捷菜单")
+        ofmwarmv1_2:SetFont("oftext")
+        ofmwarmv1_2:SetTextColor(importanttextcolor)
+
         local ofmwarmvcbarc = vgui.Create("DButton", ofmpanel1)
-        ofmwarmvcbarc:SetText("ARC放射菜单设置")
+        ofmwarmvcbarc:SetText("ARC放射菜单设置*")
         ofmwarmvcbarc:Dock(TOP)
         ofmwarmvcbarc:DockMargin(2, 4, 2, 4)
         ofmwarmvcbarc.DoClick = function()
             RunConsoleCommand( "ARC_RADIAL_CUSTOMIZE")
         end
 
+        local ofmwarmvcbwped = vgui.Create("DButton", ofmpanel1)
+        ofmwarmvcbwped:SetText("武器编辑替换工具*")
+        ofmwarmvcbwped:Dock(TOP)
+        ofmwarmvcbwped:DockMargin(2, 4, 2, 4)
+        ofmwarmvcbwped.DoClick = function()
+            RunConsoleCommand( "weapon_properties_editor")
+        end
+
+        local ofmwarmvcbnmrg = vgui.Create("DButton", ofmpanel1)
+        ofmwarmvcbnmrg:SetText("NPC模型随机化设置*")
+        ofmwarmvcbnmrg:Dock(TOP)
+        ofmwarmvcbnmrg:DockMargin(2, 4, 2, 4)
+        ofmwarmvcbnmrg.DoClick = function()
+            RunConsoleCommand( "npc_model_randomizer_gui")
+        end
+
+        -- local ofmwarmv1_3 = vgui.Create("DLabel", ofmpanel1)
+        -- ofmwarmv1_3:Dock(TOP)
+        -- ofmwarmv1_3:DockMargin(2, 8, 2, 8)
+        -- ofmwarmv1_3:SetText("设置调控")
+        -- ofmwarmv1_3:SetFont("oftext")
+        -- ofmwarmv1_3:SetTextColor(importanttextcolor)
+
+        -- local ofmwarmvcbsboxmp = vgui.Create( "DNumSlider", ofmpanel1 )
+        -- ofmwarmvcbsboxmp:Dock(TOP)
+        -- ofmwarmvcbsboxmp:DockMargin(2, 4, 2, 4)
+        -- ofmwarmvcbsboxmp:SetText( "地图道具限制" )
+        -- ofmwarmvcbsboxmp:SetMin( 0 )
+        -- ofmwarmvcbsboxmp:SetMax( 256 )
+        -- ofmwarmvcbsboxmp:SetDecimals( 0 )
+        -- ofmwarmvcbsboxmp:SetConVar( "sbox_maxprops" )
+
+        -- local ofmwarmvcbsboxmnpc = vgui.Create( "DNumSlider", ofmpanel1 )
+        -- ofmwarmvcbsboxmnpc:Dock(TOP)
+        -- ofmwarmvcbsboxmnpc:DockMargin(2, 4, 2, 4)
+        -- ofmwarmvcbsboxmnpc:SetText( "地图NPC限制" )
+        -- ofmwarmvcbsboxmnpc:SetMin( 0 )
+        -- ofmwarmvcbsboxmnpc:SetMax( 256 )
+        -- ofmwarmvcbsboxmnpc:SetDecimals( 0 )
+        -- ofmwarmvcbsboxmnpc:SetConVar( "sbox_maxnpcs" )
+
+        -- local ofmwarmvcbsboxmrg = vgui.Create( "DNumSlider", ofmpanel1 )
+        -- ofmwarmvcbsboxmrg:Dock(TOP)
+        -- ofmwarmvcbsboxmrg:DockMargin(2, 4, 2, 4)
+        -- ofmwarmvcbsboxmrg:SetText( "地图布娃娃限制" )
+        -- ofmwarmvcbsboxmrg:SetMin( 0 )
+        -- ofmwarmvcbsboxmrg:SetMax( 256 )
+        -- ofmwarmvcbsboxmrg:SetDecimals( 0 )
+        -- ofmwarmvcbsboxmrg:SetConVar( "sbox_maxragdolls" )
+
+        
 
         local ofmwarmv2 = vgui.Create("DLabel", ofmpanel2)
         ofmwarmv2:Dock(TOP)
@@ -379,6 +456,15 @@ concommand.Add("of_menu",function (ply)
 	    ofmwarmvcbrc:SetConVar("kn_realistic_combine")										
 	    ofmwarmvcbrc:SizeToContents()
 
+        local ofmwarmvcbse = ofmpanel2:Add( "DCheckBoxLabel" )
+	    ofmwarmvcbse:Dock(TOP)
+        ofmwarmvcbse:DockMargin(2, 4, 2, 4)						
+	    ofmwarmvcbse:SetText("Sninctbur的AI改进*")
+        ofmwarmvcbse:SetTextColor(whitetext)
+        ofmwarmvcbse:SetFont("oftext")				
+	    ofmwarmvcbse:SetConVar("saii_enabled")										
+	    ofmwarmvcbse:SizeToContents()
+
         local ofmwarmvcbnn = ofmpanel2:Add( "DCheckBoxLabel" )
 	    ofmwarmvcbnn:Dock(TOP)
         ofmwarmvcbnn:DockMargin(2, 4, 2, 4)					
@@ -387,6 +473,24 @@ concommand.Add("of_menu",function (ply)
         ofmwarmvcbnn:SetFont("oftext")				
 	    ofmwarmvcbnn:SetConVar("z_npc_nav_enabled")										
 	    ofmwarmvcbnn:SizeToContents()
+
+        local ofmwarmvcbarc9wp = ofmpanel2:Add( "DCheckBoxLabel" )
+	    ofmwarmvcbarc9wp:Dock(TOP)
+        ofmwarmvcbarc9wp:DockMargin(2, 4, 2, 4)					
+	    ofmwarmvcbarc9wp:SetText("NPC替换ARC9武器*")
+        ofmwarmvcbarc9wp:SetTextColor(whitetext)
+        ofmwarmvcbarc9wp:SetFont("oftext")				
+	    ofmwarmvcbarc9wp:SetConVar("arc9_npc_autoreplace")										
+	    ofmwarmvcbarc9wp:SizeToContents()
+
+        local ofmwarmvcbarccwwp = ofmpanel2:Add( "DCheckBoxLabel" )
+	    ofmwarmvcbarccwwp:Dock(TOP)
+        ofmwarmvcbarccwwp:DockMargin(2, 4, 2, 4)					
+	    ofmwarmvcbarccwwp:SetText("NPC替换ARCCW武器*")
+        ofmwarmvcbarccwwp:SetTextColor(whitetext)
+        ofmwarmvcbarccwwp:SetFont("oftext")				
+	    ofmwarmvcbarccwwp:SetConVar("arccw_npc_replace")										
+	    ofmwarmvcbarccwwp:SizeToContents()
 
         local ofmwarmvcbrsr = ofmpanel2:Add( "DCheckBoxLabel" )
 	    ofmwarmvcbrsr:Dock(TOP)
@@ -405,6 +509,8 @@ concommand.Add("of_menu",function (ply)
         ofmwarmvcbrbr:SetFont("oftext")					
 	    ofmwarmvcbrbr:SetConVar("npc_model_randomizer_bodygroups_random")										
 	    ofmwarmvcbrbr:SizeToContents()
+
+        
 
         
 
@@ -662,6 +768,25 @@ concommand.Add("of_menu",function (ply)
         ofmmmdbmf:SetFont("oftext")				
 	    ofmmmdbmf:SetConVar("mat_fullbright")									
 	    ofmmmdbmf:SizeToContents()
+
+        local ofmmmdbfogui = vgui.Create("DButton", ofmpanel1)
+        ofmmmdbfogui:SetText("雾气效果菜单")
+        ofmmmdbfogui:Dock(TOP)
+        ofmmmdbfogui:DockMargin(2, 8, 2, 8)
+        ofmmmdbfogui.DoClick = function()
+            RunConsoleCommand( "fogui")
+        end
+
+        local ofmmmdbcolorcorrectionui = vgui.Create("DButton", ofmpanel1)
+        ofmmmdbcolorcorrectionui:SetText("颜色修正菜单")
+        ofmmmdbcolorcorrectionui:Dock(TOP)
+        ofmmmdbcolorcorrectionui:DockMargin(2, 8, 2, 8)
+        ofmmmdbcolorcorrectionui.DoClick = function()
+            RunConsoleCommand( "colorcorrectionui")
+        end
+
+         
+
         
 --[[
         ma:AddCVar( "渲染第一人称模型", "r_drawviewmodel", "1", "0" )
@@ -896,7 +1021,7 @@ concommand.Add("of_menu",function (ply)
 
 
 
-
+    
     local ofmdv = ofleftbar:Add("开发工具")
     ofmdv.Paint = function(self, w, h)
         draw.RoundedBox(8, 0, 0, w, h, ofbarcolor)
@@ -968,6 +1093,7 @@ concommand.Add("of_menu",function (ply)
 
     local function ofm_help(text)
         ofmpanel:Clear()
+        surface.PlaySound("of_ui/ui_click_short2.wav")
         --ofmpanel1:Clear()
         --ofmpanel2:Clear()
     
@@ -1035,6 +1161,95 @@ concommand.Add("of_menu",function (ply)
             ofm_help(k)
         end
     end
+
+    
+
+    local ofmdvipmainhelpbutton = vgui.Create("DButton", ofmhp)      --使用须知
+    ofmdvipmainhelpbutton:SetText("使用须知")
+    ofmdvipmainhelpbutton:Dock(TOP)
+    ofmdvipmainhelpbutton:DockMargin(0, 0, 0, 0)
+    local function ofm_mainhp()
+        ofmpanel:Clear()
+
+        local ofmdvipmainhelpmaintext1 = vgui.Create("DLabel", ofmpanel)
+        ofmdvipmainhelpmaintext1:Dock(TOP)
+        ofmdvipmainhelpmaintext1:DockMargin(2, 8, 2, 4)
+        ofmdvipmainhelpmaintext1:SetText("指令百科")
+        ofmdvipmainhelpmaintext1:SetFont("oftext")
+        ofmdvipmainhelpmaintext1:SetTextColor(importanttextcolor)
+
+        local ofmdvipmainhelptext1 = vgui.Create("DLabel", ofmpanel)
+        ofmdvipmainhelptext1:Dock(TOP)
+        ofmdvipmainhelptext1:DockMargin(2, 4, 2, 8)
+        ofmdvipmainhelptext1:SetText("只记录了我觉得你用得到的指令，建议用ARC放射状菜单绑键搭配使用。")
+        ofmdvipmainhelptext1:SetFont("oftext")
+        ofmdvipmainhelptext1:SetTextColor(whitetext)
+
+        local ofmdvipmainhelprichtext1 = vgui.Create( "RichText", ofmpanel )
+        ofmdvipmainhelprichtext1:Dock( TOP )
+        ofmdvipmainhelprichtext1:DockPadding(8, 4, 8, 4)
+        ofmdvipmainhelprichtext1:SetSize(xxp, yyp/3) 
+        ofmdvipmainhelprichtext1:InsertColorChange( 255, 255, 255, 255 )
+        ofmdvipmainhelprichtext1:AppendText("\nof_menu \n[指令] 打开晦涩弗里曼的工具箱\n")
+        ofmdvipmainhelprichtext1:AppendText("of_god \n[控制台变量] 值为“1”时玩家无敌\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_drawwm \n[控制台变量] 值为“1”时隐藏第三人称\n（某些与玩家动画相关的模组可能会使它失效，只能隐藏第三人称武器模型）\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_clean \n[指令] 重置地图\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_removeallweapons \n[指令] 移除玩家武器\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_reload \n[指令] 1秒后重载\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_teleporteyetrace \n[指令] 瞬移到看着的地方，玩大地图时很有用\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_saveasplayerspawn \n[指令] 将当前位置保存为出生点（打战役时这个传送指令最方便）\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_death \n[指令] 瞬移到上次死亡的地方\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_teleportsave \n[指令] 保存位置\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_teleport \n[指令] 瞬移到上次保存的地方\n")
+        
+        
+        
+
+        
+
+        local ofmdvipmainhelpmaintext2 = vgui.Create("DLabel", ofmpanel)
+        ofmdvipmainhelpmaintext2:Dock(TOP)
+        ofmdvipmainhelpmaintext2:DockMargin(2, 8, 2, 4)
+        ofmdvipmainhelpmaintext2:SetText("插件支持")
+        ofmdvipmainhelpmaintext2:SetFont("oftext")
+        ofmdvipmainhelpmaintext2:SetTextColor(importanttextcolor)
+
+        local ofmdvipmainhelptext2 = vgui.Create("DLabel", ofmpanel)
+        ofmdvipmainhelptext2:Dock(TOP)
+        ofmdvipmainhelptext2:DockMargin(2, 4, 2, 8)
+        ofmdvipmainhelptext2:SetText("工具箱中标有“*”的选项需要创意工坊第三方插件支持")
+        ofmdvipmainhelptext2:SetFont("oftext")
+        ofmdvipmainhelptext2:SetTextColor(whitetext)
+
+        local ofmdvipmainhelprichtext2 = vgui.Create( "RichText", ofmpanel )
+        ofmdvipmainhelprichtext2:Dock( TOP )
+        ofmdvipmainhelprichtext2:DockPadding(8, 4, 8, 4)
+        ofmdvipmainhelprichtext2:SetSize(xxp, yyp/3) 
+        ofmdvipmainhelprichtext2:InsertColorChange( 255, 255, 255, 255 )
+        ofmdvipmainhelprichtext2:AppendText("ARC9 Weapon Base \nARC9武器包\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2910505837\n")
+        ofmdvipmainhelprichtext2:AppendText("\n[ArcCW] Arctic's Customizable Weapons (Base) \nARCCW武器包\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2131057232\n")
+        
+        ofmdvipmainhelprichtext2:AppendText("\nMW/WZ Skydive/Parachute + Infil \n战区降落伞\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2635378860\n")
+        ofmdvipmainhelprichtext2:AppendText("\nWeapon Editor & Replacer \n武器编辑替换器\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=933160196\n")
+        ofmdvipmainhelprichtext2:AppendText("\nArctic's Radial Binds \nARC放射状菜单\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2391301431\n")
+        
+        ofmdvipmainhelprichtext2:AppendText("\nRealistic Combine Soldier AI | almost F.E.A.R. AI \nF.E.A.R. AI\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2807525115\n")
+        ofmdvipmainhelprichtext2:AppendText("\nSninctbur's Artificial Intelligence Improvements \nSninctbur的AI改进(SAII)\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=1396685893\n")
+        ofmdvipmainhelprichtext2:AppendText("\nNPC Model Randomizer / Manager [Combines/Rebels/Metrocops]\nNPC外观随机化\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2875816421\n")
+        
+        ofmdvipmainhelprichtext2:AppendText("\nNPC Navmesh Navigation \nNPC智能寻路|可以让NPC在没有AI NODE的地图中根据导航网格移动\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2905690962\n")
+        ofmdvipmainhelprichtext2:AppendText("\nSimple Map IO Viewer \n地图输入输出查看器\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2928263128\n")
+        ofmdvipmainhelprichtext2:AppendText("\nNavmesh Optimizer \n导航网格合并工具\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2878197619\n")
+        
+
+        
+    end
+
+    ofmdvipmainhelpbutton.DoClick = function()
+        ofm_clear()
+        ofm_mainhp()
+    end
+    
 
     local ofmst = ofleftbar:Add("各项设置")
     ofmst.Paint = function(self, w, h)
@@ -1171,9 +1386,15 @@ concommand.Add("of_menu",function (ply)
 
 
     
-end)
+end
 
 
+
+local function OfMenuToggle()
+	if IsValid( of_menu ) then of_menu:Close() else of_menu_open() end
+end
+
+concommand.Add( "of_menu", OfMenuToggle )
 
 list.Set("DesktopWindows", "oftoolmenuc", {
     title = "晦弗工具箱",
