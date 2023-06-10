@@ -404,6 +404,16 @@ local function of_menu_open( )
             RunConsoleCommand( "npc_model_randomizer_gui")
         end
 
+        local ofmwarmvcbzmsgm = vgui.Create("DButton", ofmpanel1)
+        ofmwarmvcbzmsgm:SetText("NPC自动生成器设置*")
+        ofmwarmvcbzmsgm:Dock(TOP)
+        ofmwarmvcbzmsgm:DockMargin(2, 4, 2, 4)
+        ofmwarmvcbzmsgm.DoClick = function()
+            RunConsoleCommand( "zippy_map_spawner_group_menu")
+        end
+
+        
+
         -- local ofmwarmv1_3 = vgui.Create("DLabel", ofmpanel1)
         -- ofmwarmv1_3:Dock(TOP)
         -- ofmwarmv1_3:DockMargin(2, 8, 2, 8)
@@ -1236,6 +1246,7 @@ local function of_menu_open( )
         ofmdvipmainhelprichtext2:AppendText("\nRealistic Combine Soldier AI | almost F.E.A.R. AI \nF.E.A.R. AI\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2807525115\n")
         ofmdvipmainhelprichtext2:AppendText("\nSninctbur's Artificial Intelligence Improvements \nSninctbur的AI改进(SAII)\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=1396685893\n")
         ofmdvipmainhelprichtext2:AppendText("\nNPC Model Randomizer / Manager [Combines/Rebels/Metrocops]\nNPC外观随机化\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2875816421\n")
+        ofmdvipmainhelprichtext2:AppendText("\nGlobal NPC Group Spawner (Mapwide Auto Spawner)\nZippy的NPC生成器|全图智能生成NPC\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2816773479\n")
         
         ofmdvipmainhelprichtext2:AppendText("\nNPC Navmesh Navigation \nNPC智能寻路|可以让NPC在没有AI NODE的地图中根据导航网格移动\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2905690962\n")
         ofmdvipmainhelprichtext2:AppendText("\nSimple Map IO Viewer \n地图输入输出查看器\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2928263128\n")
