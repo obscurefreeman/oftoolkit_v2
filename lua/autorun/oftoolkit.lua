@@ -9,7 +9,7 @@ AddCSLuaFile()
 2033.2.13
 ]]--
 
-CreateConVar( "of_god", "0", 128, "" )		--无敌
+CreateConVar( "of_god", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--无敌
 CreateConVar( "of_drawwm", "1", 0, "" )		--第三人称模型
 CreateConVar( "of_skybox", "1", 0, "" )		--隐藏地图细节
 CreateConVar( "of_drawhud", "1", 0, "" )	--显示多余元素
@@ -40,6 +40,7 @@ CreateConVar( "sv_drawmapio", "1", 0, "" )		--合并路点
 --CreateConVar( "kn_realistic_combine", "1", 0, "" )		--智能联合军
 
 CreateConVar( "z_npc_nav_enabled" , "1", 0, "" )		--寻路
+--CreateConVar( "of_tfa_weapon" , "0", { FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--tfa武器
 
 
 
@@ -274,19 +275,19 @@ end )
 if ( SERVER ) then return end	--下面的部分不能给服务器用
 
 hook.Add("Think", "of_hud", function( ply )
-	local i = "0"
-	if ( GetConVarNumber( "of_drawhud" ) == 1 ) then
-		i = "1" 
+	if GetConVar( "of_drawhud" ):GetInt() != OF_DRAWHUD then
+		OF_DRAWHUD = GetConVar( "of_drawhud" ):GetInt()
+		local i = OF_DRAWHUD
+		RunConsoleCommand( "cl_drawhud", i )	--HUD显示
+		RunConsoleCommand( "physgun_drawbeams", i )	--物理枪射线
+		RunConsoleCommand( "physgun_halo", i )	--物理枪光圈
+		RunConsoleCommand( "gmod_drawhelp", i )	--工具帮助
+		RunConsoleCommand( "effects_unfreeze", i )	--解冻物品
+		RunConsoleCommand( "effects_freeze", i )	--锁定物品
+		RunConsoleCommand( "cl_draweffectrings", i )	--圆环
+		RunConsoleCommand( "gmod_drawtooleffects", i )	--工具外置特效
+		RunConsoleCommand( "cl_drawcameras", i )	--摄像机模型
 	end
-	RunConsoleCommand( "cl_drawhud", i )	--HUD显示
-	RunConsoleCommand( "physgun_drawbeams", i )	--物理枪射线
-	RunConsoleCommand( "physgun_halo", i )	--物理枪光圈
-	RunConsoleCommand( "gmod_drawhelp", i )	--工具帮助
-	RunConsoleCommand( "effects_unfreeze", i )	--解冻物品
-	RunConsoleCommand( "effects_freeze", i )	--锁定物品
-	RunConsoleCommand( "cl_draweffectrings", i )	--圆环
-	RunConsoleCommand( "gmod_drawtooleffects", i )	--工具外置特效
-	RunConsoleCommand( "cl_drawcameras", i )	--摄像机模型
 end)
 
 --[[
@@ -302,14 +303,13 @@ end)
 ]]--
 
 hook.Add("Think", "of_skyboxhook", function( ply )  --天空盒
-	local i = "0"
-	if ( GetConVarNumber( "of_skybox" ) == 1 ) then
-		i= "1"
+	if GetConVar( "of_skybox" ):GetInt() != OF_SKYBOX then
+		OF_SKYBOX = GetConVar( "of_skybox" ):GetInt()
+		local i = OF_SKYBOX
+		RunConsoleCommand( "r_skybox", i )	--天空盒
+		RunConsoleCommand( "fog_enable", i )	--雾
+		RunConsoleCommand( "r_drawstaticprops", i )	--物体 
 	end
-	RunConsoleCommand( "r_skybox", i )	--天空盒
-	RunConsoleCommand( "fog_enable", i )	--雾
-	RunConsoleCommand( "r_drawstaticprops", i )	--物体 
-
 end)
 
 concommand.Add( "of_1024", function( ply )	--红框
@@ -351,7 +351,7 @@ hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 	RunConsoleCommand("r_drawvgui" , 1 )
 	m:AddOption("打开晦弗工具箱", function() RunConsoleCommand( "of_menu") end):SetIcon("icon16/wrench_orange.png")
 	--m:AddOption( "一键隐藏多余元素", function() RunConsoleCommand( "of_hud") end ):SetIcon("icon16/attach.png")
-	m:AddCVar( "保留多余界面元素", "of_drawhud", "1", "0" ):SetIcon("icon16/attach.png")
+	m:AddCVar( "显示HUD及多余UI", "of_drawhud", "1", "0" ):SetIcon("icon16/attach.png")
 	
 	m:AddOption( "收拾残局", function() RunConsoleCommand( "of_clean") end ):SetIcon("icon16/cut.png")
 	m:AddOption( "重置地图", function() RunConsoleCommand( "of_cleanup") end ):SetIcon("icon16/arrow_refresh.png")

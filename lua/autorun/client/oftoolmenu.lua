@@ -2,9 +2,9 @@ AddCSLuaFile()
 
 
 
-local xx,yy=ScrW()/1920,ScrH()/1080
-local xxp,yyp=800*xx-162,600*yy
-local xxs,yys=xxp/638,yyp/600
+local xx,yy=ScrW()/1920,ScrH()/1080     --玩家屏幕分辨率与我的屏幕分辨率的比
+local xxp,yyp=800*xx-162,600*yy     --菜单大小
+local xxs,yys=xxp/638,yyp/600   --倍率
 
 surface.CreateFont("oftitle", {     --创建字体
     font = "Dream Han Sans CN",
@@ -24,8 +24,8 @@ surface.CreateFont("oftext", {
     size = 20*xxs
 })
 
-local faded_black = Color(0, 0, 0, 200) -- The color black but with 200 Alpha
-local panel = Color(37, 17, 2, 105)
+local faded_black = Color(0, 0, 0, 115) -- The color black but with 200 Alpha
+local panel = Color(35, 35, 35, 103)
 local oflistcolor = Color(200, 200, 200, 88)    --这玩意是左边列表框子的颜色
 local ofbarcolor1 = Color(128, 0, 255, 190)    --这玩意是选项卡本来的颜色，点它会出现下拉菜单，我本来想把它们染成彩色的，但是这样太丑了
 local ofbarcolor2 = Color(0, 157, 255, 190)
@@ -108,6 +108,8 @@ local function of_menu_open( )
     of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.7")
     of_menu:SetDraggable(true)
     of_menu:MakePopup()
+    of_menu:SetSizable(true)
+    of_menu:SetKeyboardInputEnabled( false )
     surface.PlaySound("of_ui/ui_click_confirm1.wav")
     function of_menu :OnClose()
         surface.PlaySound("of_ui/ui_click_confirm2.wav")
@@ -209,6 +211,7 @@ local function of_menu_open( )
     ofmwellcomeud:DockPadding(8, 4, 8, 4)
     ofmwellcomeud:SetSize(xxp, yyp/3) 
     ofmwellcomeud:InsertColorChange( 255, 255, 255, 255 )
+    ofmwellcomeud:AppendText("2023.6.18 \n修复了菜单卡移动的问题，（现在你可以自由移动了）增加背景NPC模组支持\n调整了菜单右侧的颜色以适应其他个性化主题，调整部分功能的表述使其更易于理解\n修复隐藏多余UI覆盖原版隐藏hud功能的Bug以及无法单独隐藏地图细节的Bug\n添加TFA武器替换的选项\n")
     ofmwellcomeud:AppendText("2023.6.10 \n小型更新发布，支持NPC自动生成器，部分代码已改进\n")
     ofmwellcomeud:AppendText("2023.6.5 \n小型更新发布，支持SAII\n")
     ofmwellcomeud:AppendText("2023.5.28 \n中型更新发布，完善了帮助界面，易用性提升，增加了不少新功能（包括对一些常用模组的支持）\n增加界面UI音效,优化使用体验\n另外目前新地图的制作由于技术限制和个人准备考试暂停\n")
@@ -479,11 +482,21 @@ local function of_menu_open( )
         local ofmwarmvcbnn = ofmpanel2:Add( "DCheckBoxLabel" )
 	    ofmwarmvcbnn:Dock(TOP)
         ofmwarmvcbnn:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbnn:SetText("NPC智能寻路*")
+	    ofmwarmvcbnn:SetText("NPC用导航网格作为路点寻路*")
         ofmwarmvcbnn:SetTextColor(whitetext)
         ofmwarmvcbnn:SetFont("oftext")				
 	    ofmwarmvcbnn:SetConVar("z_npc_nav_enabled")										
 	    ofmwarmvcbnn:SizeToContents()
+        
+        local ofmwarmvcbbgn = ofmpanel2:Add( "DCheckBoxLabel" )
+	    ofmwarmvcbbgn:Dock(TOP)
+        ofmwarmvcbbgn:DockMargin(2, 4, 2, 4)					
+	    ofmwarmvcbbgn:SetText("背景NPC（需要导航网格）*")
+        ofmwarmvcbbgn:SetTextColor(whitetext)
+        ofmwarmvcbbgn:SetFont("oftext")				
+	    ofmwarmvcbbgn:SetConVar("bgn_enable")										
+	    ofmwarmvcbbgn:SizeToContents()
+        
 
         local ofmwarmvcbarc9wp = ofmpanel2:Add( "DCheckBoxLabel" )
 	    ofmwarmvcbarc9wp:Dock(TOP)
@@ -502,6 +515,183 @@ local function of_menu_open( )
         ofmwarmvcbarccwwp:SetFont("oftext")				
 	    ofmwarmvcbarccwwp:SetConVar("arccw_npc_replace")										
 	    ofmwarmvcbarccwwp:SizeToContents()
+
+        -- local ofmwarmvcbtfawp = ofmpanel2:Add( "DCheckBoxLabel" )
+	    -- ofmwarmvcbtfawp:Dock(TOP)
+        -- ofmwarmvcbtfawp:DockMargin(2, 4, 2, 4)					
+	    -- ofmwarmvcbtfawp:SetText("NPC替换TFA武器*")
+        -- ofmwarmvcbtfawp:SetTextColor(whitetext)
+        -- ofmwarmvcbtfawp:SetFont("oftext")				
+	    -- ofmwarmvcbtfawp:SetConVar("of_tfa_weapon")										
+	    -- ofmwarmvcbtfawp:SizeToContents()
+        -----------------------------------------------------------------------------------------------
+        
+
+
+
+
+
+        local tfanpcwpList = ofmpanel2:Add( "DListView" )
+		tfanpcwpList:Dock(TOP)
+		tfanpcwpList:DockMargin(8, 4, 8, 4)
+        tfanpcwpList:SetHeight(100) 
+        tfanpcwpList:AddColumn("TFA武器替换"):SetWidth(xxp/4)
+        tfanpcwpList:AddColumn("真实名称"):SetWidth(xxp/4)
+        tfanpcwpList:SetMultiSelect(false)
+        local weaponCats = {}
+        for _, wep in pairs(weapons.GetList()) do
+            if wep and wep.Spawnable and weapons.IsBasedOn(wep.ClassName, "tfa_gun_base") then
+                local cat = wep.Category or "Other"
+                weaponCats[cat] = weaponCats[cat] or {}
+
+                table.insert(weaponCats[cat], {
+                    ["class"] = wep.ClassName,
+                    ["title"] = wep.PrintName or wep.ClassName
+                })
+            end
+        end
+
+        local catKeys = table.GetKeys(weaponCats)
+        table.sort(catKeys, function(a, b) return a < b end)
+
+        -- for _, k in ipairs(catKeys) do
+        --     local v = weaponCats[k]
+        --     local tfanpcwpListLine = tfanpcwpList:AddLine(k)
+        --     --local tfanpcwpListLine = tfanpcwpList:Add( "DMenu" )
+        --     table.SortByMember(v, "title", true)
+        --     tfanpcwpListLine:Dock( TOP )
+	    --     tfanpcwpListLine:DockMargin(0, 0, 0, 0)     
+            
+        --     local tfanpcwpMenu = DermaMenu()
+
+        --     for _, b in ipairs(v) do
+        --         tfanpcwpMenu:AddCVar(b.title, "gmod_npcweapon", b.class)
+        --     end
+        --     function tfanpcwpListLine.DoClick(parent, lineID, line)
+        --         tfanpcwpMenu:Open()
+        --     end
+               
+        -- end
+
+        
+
+        local LastCat = 1
+        local of_tfa_swep_box = vgui.Create("DComboBox", ofmpanel2)
+        of_tfa_swep_box:Dock(TOP)
+        for _, k in ipairs(catKeys) do
+            local v = weaponCats[k]
+            local tfanpcwpbox = of_tfa_swep_box:AddChoice(k)
+            table.SortByMember(v, "title", true)
+            for _, b in ipairs(v) do
+
+                tfanpcwpList:AddLine(b.title,b.class)
+        
+            end
+        end
+        of_tfa_swep_box:ChooseOptionID(weaponCats[LastCat] && LastCat or 1)
+
+        function tfanpcwpList.DoDoubleClick(parent, lineID, line)
+
+            local firstColumnText = line:GetColumnText(1)
+            local secondColumnText =  line:GetColumnText(2)
+            RunConsoleCommand("gmod_npcweapon", secondColumnText)
+    
+        end
+
+        
+        
+
+        -- 以下的注释是一种更高级的派生方法，但是我没用它们，因为我也不知道怎么搞
+
+        -- local LastCat = 1
+        -- local tfanpcwpList = list.Get(_list)
+        -- local items = {}
+        -- local of_tfa_swep_box = vgui.Create("DComboBox", ofmpanel2)
+        -- of_tfa_swep_box:Dock(TOP)
+        -- -- Add all categories from the list:
+        -- -- local cats = {}
+        -- -- local function cat_used(cat)
+        -- --     for _,v in ipairs(cats) do
+        -- --         if (v == cat) then return true end
+        -- --     end
+        -- -- end
+        -- -- for _, wep in pairs(weapons.GetList()) do
+        -- --     local cat = item.Category
+        -- --     if !cat_used(cat) then
+        -- --         of_tfa_swep_box:AddChoice(cat)
+        -- --         table.insert(cats, cat)
+        -- --     end
+        -- -- end
+        -- -- of_tfa_swep_box:ChooseOptionID(cats[LastCat] && LastCat or 1)
+
+
+        -- local weaponCats = {}
+        -- for _, wep in pairs(weapons.GetList()) do
+        --     if wep and wep.Spawnable and weapons.IsBasedOn(wep.ClassName, "tfa_gun_base") then
+        --         local cat = wep.Category or "Other"
+        --         weaponCats[cat] = weaponCats[cat] or {}
+
+        --         table.insert(weaponCats[cat], {
+        --             ["class"] = wep.ClassName,
+        --             ["title"] = wep.PrintName or wep.ClassName
+        --         })
+        --     end
+        -- end
+
+        -- local catKeys = table.GetKeys(weaponCats)
+        -- table.sort(catKeys, function(a, b) return a < b end)
+
+        -- for _, k in ipairs(catKeys) do
+        --     local v = weaponCats[k]
+        --     local tfanpcwpbox = of_tfa_swep_box:AddChoice(k)
+        --     table.SortByMember(v, "title", true)
+        -- end
+
+        -- of_tfa_swep_box:ChooseOptionID(weaponCats[LastCat] && LastCat or 1)
+
+
+        -- local function update_tfanpcwpList()
+        --     -- Clear item data list:
+        --     items = {}
+        --     -- Remove old lines:
+        --     for k in ipairs(tfanpcwpList:GetLines()) do
+        --         tfanpcwpList:RemoveLine(k)
+        --     end
+        --     -- Make new ones and populate item data list:
+        --     for k,data in pairs(tfanpcwpList) do
+        --         if data.Category == tfanpcwpList:GetSelected() then
+        --             tfanpcwpList:AddSubMenu(data.Name or k)
+        --             table.insert(items, data)
+        --         end
+        --     end
+    
+        --     tfanpcwpList:SortByColumn(1)
+        -- end
+        -- -- Update directly when opening the panel:
+        -- update_tfanpcwpList()
+
+        -- local npcWepList = list.GetForEdit("NPCUsableWeapons")
+
+        -- hook.Add("PlayerSpawnNPC", "TFACheckNPCWeapon", function(plyv, npcclassv, wepclassv)
+        --     if type(wepclassv) ~= "string" or wepclassv == "" then return end
+
+        --     if not npcWepList[wepclassv] then -- do not copy the table
+        --         local wep = weapons.GetStored(wepclassv)
+
+        --         if wep and (wep.Spawnable and not wep.AdminOnly) and weapons.IsBasedOn(wep.ClassName, "tfa_gun_base") then
+        --             npcWepList[wepclassv] = {
+        --                 ["class"] = wep.ClassName,
+        --                 ["title"] = wep.PrintName or wep.ClassName
+        --             }
+        --         end
+        --     end
+        -- end)
+
+        -----------------------------------------------------------------------------------------------
+
+        
+
+
 
         local ofmwarmvcbrsr = ofmpanel2:Add( "DCheckBoxLabel" )
 	    ofmwarmvcbrsr:Dock(TOP)
@@ -1204,7 +1394,8 @@ local function of_menu_open( )
         ofmdvipmainhelprichtext1:AppendText("\nof_menu \n[指令] 打开晦涩弗里曼的工具箱\n")
         ofmdvipmainhelprichtext1:AppendText("of_god \n[控制台变量] 值为“1”时玩家无敌\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_drawwm \n[控制台变量] 值为“1”时隐藏第三人称\n（某些与玩家动画相关的模组可能会使它失效，只能隐藏第三人称武器模型）\n")
-        ofmdvipmainhelprichtext1:AppendText("\nof_clean \n[指令] 重置地图\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_cleanup \n[指令] 重置地图\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_clean \n[指令] 清理贴图和尸体（可能无效）\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_removeallweapons \n[指令] 移除玩家武器\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_reload \n[指令] 1秒后重载\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_teleporteyetrace \n[指令] 瞬移到看着的地方，玩大地图时很有用\n")
