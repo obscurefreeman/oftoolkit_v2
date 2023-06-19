@@ -24,8 +24,12 @@ surface.CreateFont("oftext", {
     size = 20*xxs
 })
 
-local faded_black = Color(0, 0, 0, 115) -- The color black but with 200 Alpha
-local panel = Color(35, 35, 35, 103)
+
+local i = GetConVar( "of_menu_customize_faded_black" )
+local faded_black = Color(0, 0, 0, 180)
+local x = GetConVar( "of_menu_customize_panel" )
+local panel = Color(35, 35, 35, 67)
+
 local oflistcolor = Color(200, 200, 200, 88)    --这玩意是左边列表框子的颜色
 local ofbarcolor1 = Color(128, 0, 255, 190)    --这玩意是选项卡本来的颜色，点它会出现下拉菜单，我本来想把它们染成彩色的，但是这样太丑了
 local ofbarcolor2 = Color(0, 157, 255, 190)
@@ -105,7 +109,7 @@ local function of_menu_open( )
     local of_menu = vgui.Create("DFrame")
     of_menu:SetSize(800*xx, 600*yy)
     of_menu:Center()
-    of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.7")
+    of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.8")
     of_menu:SetDraggable(true)
     of_menu:MakePopup()
     of_menu:SetSizable(true)
@@ -127,7 +131,7 @@ local function of_menu_open( )
         draw.RoundedBox(8, 0, 0, w, h, oflistcolor)
     end
 
-    local ofmpanel = vgui.Create("DPanel", of_menu)
+    local ofmpanel = vgui.Create("DPanel", of_menu)     --我试过用DScrollPanel，有些东西会被挡住
     ofmpanel:SetSize(800*xx-162, 600*yy)
     ofmpanel:Dock(RIGHT)
     ofmpanel:DockPadding(2, 2, 2, 8)
@@ -211,7 +215,7 @@ local function of_menu_open( )
     ofmwellcomeud:DockPadding(8, 4, 8, 4)
     ofmwellcomeud:SetSize(xxp, yyp/3) 
     ofmwellcomeud:InsertColorChange( 255, 255, 255, 255 )
-    ofmwellcomeud:AppendText("2023.6.18 \n修复了菜单卡移动的问题，（现在你可以自由移动了）增加背景NPC模组支持\n调整了菜单右侧的颜色以适应其他个性化主题，调整部分功能的表述使其更易于理解\n修复隐藏多余UI覆盖原版隐藏hud功能的Bug以及无法单独隐藏地图细节的Bug\n添加TFA武器替换的选项\n")
+    ofmwellcomeud:AppendText("2023.6.19 \n修复了菜单卡移动的问题，（现在你可以自由移动了）增加背景NPC模组支持\n调整了菜单右侧的颜色以适应其他个性化主题，调整部分文字使其更易于理解\n修复隐藏多余UI覆盖原版隐藏hud功能的Bug以及无法单独隐藏地图细节的Bug\n添加TFA和TacRP武器替换的选项（这个东西我弄了好久），增加问题反馈界面\n")
     ofmwellcomeud:AppendText("2023.6.10 \n小型更新发布，支持NPC自动生成器，部分代码已改进\n")
     ofmwellcomeud:AppendText("2023.6.5 \n小型更新发布，支持SAII\n")
     ofmwellcomeud:AppendText("2023.5.28 \n中型更新发布，完善了帮助界面，易用性提升，增加了不少新功能（包括对一些常用模组的支持）\n增加界面UI音效,优化使用体验\n另外目前新地图的制作由于技术限制和个人准备考试暂停\n")
@@ -501,7 +505,7 @@ local function of_menu_open( )
         local ofmwarmvcbarc9wp = ofmpanel2:Add( "DCheckBoxLabel" )
 	    ofmwarmvcbarc9wp:Dock(TOP)
         ofmwarmvcbarc9wp:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbarc9wp:SetText("NPC替换ARC9武器*")
+	    ofmwarmvcbarc9wp:SetText("NPC原版武器替换为同类ARC9武器*")
         ofmwarmvcbarc9wp:SetTextColor(whitetext)
         ofmwarmvcbarc9wp:SetFont("oftext")				
 	    ofmwarmvcbarc9wp:SetConVar("arc9_npc_autoreplace")										
@@ -510,7 +514,7 @@ local function of_menu_open( )
         local ofmwarmvcbarccwwp = ofmpanel2:Add( "DCheckBoxLabel" )
 	    ofmwarmvcbarccwwp:Dock(TOP)
         ofmwarmvcbarccwwp:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbarccwwp:SetText("NPC替换ARCCW武器*")
+	    ofmwarmvcbarccwwp:SetText("NPC原版武器替换为同类ARCCW武器*")
         ofmwarmvcbarccwwp:SetTextColor(whitetext)
         ofmwarmvcbarccwwp:SetFont("oftext")				
 	    ofmwarmvcbarccwwp:SetConVar("arccw_npc_replace")										
@@ -575,12 +579,12 @@ local function of_menu_open( )
 
         
 
-        local LastCat = 1
-        local of_tfa_swep_box = vgui.Create("DComboBox", ofmpanel2)
-        of_tfa_swep_box:Dock(TOP)
+        --local LastCat = 1
+        --local of_tfa_swep_box = vgui.Create("DComboBox", ofmpanel2)
+        --of_tfa_swep_box:Dock(TOP)
         for _, k in ipairs(catKeys) do
             local v = weaponCats[k]
-            local tfanpcwpbox = of_tfa_swep_box:AddChoice(k)
+            --local tfanpcwpbox = of_tfa_swep_box:AddChoice(k)
             table.SortByMember(v, "title", true)
             for _, b in ipairs(v) do
 
@@ -588,7 +592,10 @@ local function of_menu_open( )
         
             end
         end
-        of_tfa_swep_box:ChooseOptionID(weaponCats[LastCat] && LastCat or 1)
+        --of_tfa_swep_box:ChooseOptionID(weaponCats[LastCat] && LastCat or 1)
+        --原来有一个用来选择武器包名称的box现在删掉了，因为我不会弄
+
+
 
         function tfanpcwpList.DoDoubleClick(parent, lineID, line)
 
@@ -598,6 +605,57 @@ local function of_menu_open( )
     
         end
 
+        local tacrpnpcwpList = ofmpanel2:Add( "DListView" )
+		tacrpnpcwpList:Dock(TOP)
+		tacrpnpcwpList:DockMargin(8, 4, 8, 4)
+        tacrpnpcwpList:SetHeight(100) 
+        tacrpnpcwpList:AddColumn("TacRP武器替换"):SetWidth(xxp/4)
+        tacrpnpcwpList:AddColumn("真实名称"):SetWidth(xxp/4)
+        tacrpnpcwpList:SetMultiSelect(false)
+        local weaponCatsTacRP = {}
+        for _, wep in pairs(weapons.GetList()) do
+            if wep and wep.Spawnable and weapons.IsBasedOn(wep.ClassName, "tacrp_base") then
+                local cat = wep.Category or "Other"
+                weaponCatsTacRP[cat] = weaponCatsTacRP[cat] or {}
+
+                table.insert(weaponCatsTacRP[cat], {
+                    ["class"] = wep.ClassName,
+                    ["title"] = wep.PrintName or wep.ClassName
+                })
+            end
+        end
+
+        local catKeystacrp = table.GetKeys(weaponCatsTacRP)
+        table.sort(catKeystacrp, function(a, b) return a < b end)
+
+        for _, k in ipairs(catKeystacrp) do
+            local v = weaponCatsTacRP[k]
+            table.SortByMember(v, "title", true)
+            for _, b in ipairs(v) do
+
+                tacrpnpcwpList:AddLine(b.title,b.class)
+        
+            end
+        end
+
+        function tacrpnpcwpList.DoDoubleClick(parent, lineID, line)
+
+            local firstColumnText = line:GetColumnText(1)
+            local secondColumnText =  line:GetColumnText(2)
+            RunConsoleCommand("gmod_npcweapon", secondColumnText)
+    
+        end
+
+
+
+        
+        local ofmwarmvcbtfar = vgui.Create("DButton", ofmpanel2)
+        ofmwarmvcbtfar:SetText("重置回默认武器")
+        ofmwarmvcbtfar:Dock(TOP)
+        ofmwarmvcbtfar:DockMargin(2, 4, 2, 4)
+        ofmwarmvcbtfar.DoClick = function()
+            RunConsoleCommand("gmod_npcweapon", "")
+        end
         
         
 
@@ -1391,8 +1449,8 @@ local function of_menu_open( )
         ofmdvipmainhelprichtext1:DockPadding(8, 4, 8, 4)
         ofmdvipmainhelprichtext1:SetSize(xxp, yyp/3) 
         ofmdvipmainhelprichtext1:InsertColorChange( 255, 255, 255, 255 )
-        ofmdvipmainhelprichtext1:AppendText("\nof_menu \n[指令] 打开晦涩弗里曼的工具箱\n")
-        ofmdvipmainhelprichtext1:AppendText("of_god \n[控制台变量] 值为“1”时玩家无敌\n")
+        ofmdvipmainhelprichtext1:AppendText("of_menu \n[指令] 打开晦涩弗里曼的工具箱\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_god \n[控制台变量] 值为“1”时玩家无敌\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_drawwm \n[控制台变量] 值为“1”时隐藏第三人称\n（某些与玩家动画相关的模组可能会使它失效，只能隐藏第三人称武器模型）\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_cleanup \n[指令] 重置地图\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_clean \n[指令] 清理贴图和尸体（可能无效）\n")
@@ -1451,6 +1509,74 @@ local function of_menu_open( )
     ofmdvipmainhelpbutton.DoClick = function()
         ofm_clear()
         ofm_mainhp()
+    end
+
+    local ofmbugreportbutton = vgui.Create("DButton", ofmhp)      --bug
+    ofmbugreportbutton:SetText("更新计划")
+    ofmbugreportbutton:Dock(TOP)
+    ofmbugreportbutton:DockMargin(0, 0, 0, 0)
+    local function ofm_bugreportbutton()
+        ofmpanel:Clear()
+
+        local ofmbugreportmaintext1 = vgui.Create("DLabel", ofmpanel)
+        ofmbugreportmaintext1:Dock(TOP)
+        ofmbugreportmaintext1:DockMargin(2, 8, 2, 4)
+        ofmbugreportmaintext1:SetText("代办事项")
+        ofmbugreportmaintext1:SetFont("oftext")
+        ofmbugreportmaintext1:SetTextColor(importanttextcolor)
+
+        local ofmbugreporttext1 = vgui.Create("DLabel", ofmpanel)
+        ofmbugreporttext1:Dock(TOP)
+        ofmbugreporttext1:DockMargin(2, 4, 2, 8)
+        ofmbugreporttext1:SetText("我对工具箱未来功能的计划以及将要修复的漏洞。")
+        ofmbugreporttext1:SetFont("oftext")
+        ofmbugreporttext1:SetTextColor(whitetext)
+
+        local ofmbugreportrichtext1 = vgui.Create( "RichText", ofmpanel )
+        ofmbugreportrichtext1:Dock( TOP )
+        ofmbugreportrichtext1:DockPadding(8, 4, 8, 4)
+        ofmbugreportrichtext1:SetSize(xxp, yyp/5) 
+        ofmbugreportrichtext1:InsertColorChange( 255, 255, 255, 255 )
+        ofmbugreportrichtext1:AppendText("2023.6.19\nNPC替换TFA武器菜单需要改进，现在看起来太乱\n需要添加更多个性化颜色以适应不同UI主题，需要添加菜单透明度选项\n可能增加Tacrp武器包支持（下午1：09已完成）\n受支持但没安装的模组对应的选项在菜单里显示为已开启并没有办法关闭，需要添加颜色进行区分\n")
+        ofmbugreportrichtext1:AppendText("\n很久之前 \n（未经证实）工具箱在分辨率不是1920*1080的电脑上可能会出现错位的现象\n")
+        
+        
+        
+
+        
+
+        local ofmbugreportmaintext2 = vgui.Create("DLabel", ofmpanel)
+        ofmbugreportmaintext2:Dock(TOP)
+        ofmbugreportmaintext2:DockMargin(2, 8, 2, 4)
+        ofmbugreportmaintext2:SetText("特别感谢")
+        ofmbugreportmaintext2:SetFont("oftext")
+        ofmbugreportmaintext2:SetTextColor(importanttextcolor)
+
+        local ofmbugreporttext2 = vgui.Create("DLabel", ofmpanel)
+        ofmbugreporttext2:Dock(TOP)
+        ofmbugreporttext2:DockMargin(2, 4, 2, 8)
+        ofmbugreporttext2:SetSize(xxp, 50*xxs) 
+        ofmbugreporttext2:SetText("近期（2023.6.19），我收到了大量关于工具箱的建议及反馈。\n因此，是时候专门开一个栏记录一下了！")
+        ofmbugreporttext2:SetFont("oftext")
+        ofmbugreporttext2:SetTextColor(whitetext)
+
+        local ofmbugreportrichtext2 = vgui.Create( "RichText", ofmpanel )
+        ofmbugreportrichtext2:Dock( TOP )
+        ofmbugreportrichtext2:DockPadding(8, 4, 8, 4)
+        ofmbugreportrichtext2:SetSize(xxp, yyp*2/5) 
+        ofmbugreportrichtext2:InsertColorChange( 255, 255, 255, 255 )
+        ofmbugreportrichtext2:AppendText("2023.6.18\nGlobex（Steam）\n反馈订阅后没法单独隐藏hud的漏洞（已修复）\n反馈受支持但没安装的模组对应的选项在菜单里显示为已开启并没有办法关闭的漏洞（未修复）\n（这个漏洞虽然不影响功能但是容易误导玩家，应当重视）\n反馈工具箱会导致csm失效的漏洞（修复了。。。应该吧）\n建议增加MWB配件保存，NPC死亡人数过多自动后撤，实体爆炸，NPC自相残杀，优化帧数，全亮模式分级，调整NPC透视距离功能\n（建议有些多w(ﾟДﾟ)w某些功能以后再看吧）\n\nXiaoHappyEnd（B站）\n反馈订阅后没法单独隐藏hud的漏洞（已经修复）\n")
+        ofmbugreportrichtext2:AppendText("\n2023.6.16\n爱打电动的汁子（B站）\n建议增加NPC替换TFA武器的选项（完成了一半）\n")
+        
+
+        
+
+        
+    end
+
+    ofmbugreportbutton.DoClick = function()
+        ofm_clear()
+        ofm_bugreportbutton()
     end
     
 
@@ -1570,6 +1696,24 @@ local function of_menu_open( )
         ofmcs3:SetText("这只是一个测试功能，目前颜色主题不能保存。")
         ofmcs3:SetFont("oftext")
         ofmcs3:SetTextColor(whitetext)
+
+        -- local ofmcfb = vgui.Create( "DNumSlider", ofmpanel )
+        -- ofmcfb:Dock(TOP)
+        -- ofmcfb:DockMargin(2, 4, 2, 4)
+        -- ofmcfb:SetText( "工具箱背景透明度" )
+        -- ofmcfb:SetMin( 0 )
+        -- ofmcfb:SetMax( 256 )
+        -- ofmcfb:SetDecimals( 0 )
+        -- ofmcfb:SetConVar( "of_menu_customize_faded_black" )
+
+        -- local ofmcpcl = vgui.Create( "DNumSlider", ofmpanel )
+        -- ofmcpcl:Dock(TOP)
+        -- ofmcpcl:DockMargin(2, 4, 2, 4)
+        -- ofmcpcl:SetText( "工具箱页面透明度" )
+        -- ofmcpcl:SetMin( 0 )
+        -- ofmcpcl:SetMax( 256 )
+        -- ofmcpcl:SetDecimals( 0 )
+        -- ofmcpcl:SetConVar( "of_menu_customize_panel" )
 
 
 

@@ -42,7 +42,8 @@ CreateConVar( "sv_drawmapio", "1", 0, "" )		--合并路点
 CreateConVar( "z_npc_nav_enabled" , "1", 0, "" )		--寻路
 --CreateConVar( "of_tfa_weapon" , "0", { FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--tfa武器
 
-
+CreateConVar( "of_menu_customize_faded_black" , "115",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "",0,255 )
+CreateConVar( "of_menu_customize_panel" , "103",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "",0,255  )
 
 
 
