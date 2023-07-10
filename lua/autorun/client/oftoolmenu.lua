@@ -65,7 +65,7 @@ local helpentries = {
     工具箱会支持一些基本插件，其中包括我常用的插件和某些热门插件
     当然。如果你不喜欢这些插件你也可以不订阅，这不是必须的！！
 
-    我想做这样的快捷工具箱已经很久了，目前我还在不断完善它的代码
+    我想做这样的快捷工具箱已经很久了，目前我还在不断完善它的代码。
 
     
     ]],
@@ -109,7 +109,7 @@ local function of_menu_open( )
     local of_menu = vgui.Create("DFrame")
     of_menu:SetSize(800*xx, 600*yy)
     of_menu:Center()
-    of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.8")
+    of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.9")
     of_menu:SetDraggable(true)
     of_menu:MakePopup()
     of_menu:SetSizable(true)
@@ -207,7 +207,7 @@ local function of_menu_open( )
     ofmwellcomenews:SetSize(xxp, yyp/9) 
     ofmwellcomenews:DockPadding(8, 4, 8, 4)
     ofmwellcomenews:SetFont("oftextlarge") 
-    ofmwellcomenews:SetText("新闻！")
+    ofmwellcomenews:SetText("新地图现已推出！")
     ofmwellcomenews:SetTextColor(importanttextcolor)
 
     local ofmwellcomeud = vgui.Create( "RichText", ofmpanel )
@@ -215,6 +215,7 @@ local function of_menu_open( )
     ofmwellcomeud:DockPadding(8, 4, 8, 4)
     ofmwellcomeud:SetSize(xxp, yyp/3) 
     ofmwellcomeud:InsertColorChange( 255, 255, 255, 255 )
+    ofmwellcomeud:AppendText("2023.7.10 \n中型更新，增加了覆写玩家血量,自动回血，杀敌回血的功能\n并且现在没有挂载的模组会提示未挂载\n（这个功能可能会引起未知bug，如果在游戏里发现相关问题，请及时汇报）\n此外，新地图光华高中周年纪念版现已推出！请前往创意工坊下载！\n")
     ofmwellcomeud:AppendText("2023.6.19 \n修复了菜单卡移动的问题，（现在你可以自由移动了）增加背景NPC模组支持\n调整了菜单右侧的颜色以适应其他个性化主题，调整部分文字使其更易于理解\n修复隐藏多余UI覆盖原版隐藏hud功能的Bug以及无法单独隐藏地图细节的Bug\n添加TFA和TacRP武器替换的选项（这个东西我弄了好久），增加问题反馈界面\n")
     ofmwellcomeud:AppendText("2023.6.10 \n小型更新发布，支持NPC自动生成器，部分代码已改进\n")
     ofmwellcomeud:AppendText("2023.6.5 \n小型更新发布，支持SAII\n")
@@ -343,16 +344,98 @@ local function of_menu_open( )
 	    ofmwarmvcballowweaponsinvehicle:SetConVar("of_allowweaponsinvehicle")										
 	    ofmwarmvcballowweaponsinvehicle:SizeToContents()
 
-        local ofmwarmvcbarc9rs = ofmpanel1:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbarc9rs:Dock(TOP)
-        ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbarc9rs:SetText("ARC9替换地面武器")
-        ofmwarmvcbarc9rs:SetTextColor(whitetext)
-        ofmwarmvcbarc9rs:SetFont("oftext")				
-	    ofmwarmvcbarc9rs:SetConVar("arc9_replace_spawned")										
-	    ofmwarmvcbarc9rs:SizeToContents()
+        if ConVarExists("arc9_replace_spawned") then
+            local ofmwarmvcbarc9rs = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmwarmvcbarc9rs:Dock(TOP)
+            ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)					
+            ofmwarmvcbarc9rs:SetText("ARC9替换地面武器*")
+            ofmwarmvcbarc9rs:SetTextColor(whitetext)
+            ofmwarmvcbarc9rs:SetFont("oftext")				
+            ofmwarmvcbarc9rs:SetConVar("arc9_replace_spawned")										
+            ofmwarmvcbarc9rs:SizeToContents()
+        else
+            local ofmwarmvcbarc9rs = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbarc9rs:Dock(TOP)
+            ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbarc9rs:SetText("（未挂载）ARC9替换地面武器*")
+            ofmwarmvcbarc9rs:SetFont("oftext")
+            ofmwarmvcbarc9rs:SetTextColor(whitetext) 
+        end
 
+        local ConflictExistshealthforkills = file.Exists("lua/autorun/healthforkills.lua","GAME")
+        local ConflictExistshealthregen = file.Exists("lua/autorun/healthregen.lua","GAME")
 
+        if ConflictExistshealthforkills == false and ConflictExistshealthregen == false then
+
+            local ofmwarmvcboverridehealth = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmwarmvcboverridehealth:Dock(TOP)
+            ofmwarmvcboverridehealth:DockMargin(2, 2, 2, 0)						
+            ofmwarmvcboverridehealth:SetText("覆写玩家生命值")
+            ofmwarmvcboverridehealth:SetTextColor(whitetext)	
+            ofmwarmvcboverridehealth:SetFont("oftext")			
+            ofmwarmvcboverridehealth:SetConVar("of_overridehealth")										
+            ofmwarmvcboverridehealth:SizeToContents()
+
+            local ofmwarmvcboverridehealthvalue = vgui.Create( "DNumSlider", ofmpanel1 )
+            ofmwarmvcboverridehealthvalue:Dock(TOP)
+            ofmwarmvcboverridehealthvalue:DockMargin(2, 2, 2, 2)
+            ofmwarmvcboverridehealthvalue:SetText("自定义生命值" )
+            ofmwarmvcboverridehealthvalue:SetMin( 1 )
+            ofmwarmvcboverridehealthvalue:SetMax( 1000 )
+            ofmwarmvcboverridehealthvalue:SetDecimals( 0 )
+            ofmwarmvcboverridehealthvalue:SetConVar( "of_overridehealthvalue" )
+
+            local ofmwarmvcbhealthregen = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmwarmvcbhealthregen:Dock(TOP)
+            ofmwarmvcbhealthregen:DockMargin(2, 2, 2, 0)						
+            ofmwarmvcbhealthregen:SetText("玩家自动回血")
+            ofmwarmvcbhealthregen:SetTextColor(whitetext)	
+            ofmwarmvcbhealthregen:SetFont("oftext")			
+            ofmwarmvcbhealthregen:SetConVar("of_healthregen")										
+            ofmwarmvcbhealthregen:SizeToContents()
+
+            local ofmwarmvcbhealthregenspeed = vgui.Create( "DNumSlider", ofmpanel1 )
+            ofmwarmvcbhealthregenspeed:Dock(TOP)
+            ofmwarmvcbhealthregenspeed:DockMargin(2, 2, 2, 2)
+            ofmwarmvcbhealthregenspeed:SetText( "回血速度" )
+            ofmwarmvcbhealthregenspeed:SetMin( 1 )
+            ofmwarmvcbhealthregenspeed:SetMax( 10 )
+            ofmwarmvcbhealthregenspeed:SetDecimals( 0 )
+            ofmwarmvcbhealthregenspeed:SetConVar( "of_healthregen_speed" )
+
+            local ofmwarmvcbhealthforkills = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmwarmvcbhealthforkills:Dock(TOP)
+            ofmwarmvcbhealthforkills:DockMargin(2, 2, 2, 0)						
+            ofmwarmvcbhealthforkills:SetText("杀敌回血")
+            ofmwarmvcbhealthforkills:SetTextColor(whitetext)	
+            ofmwarmvcbhealthforkills:SetFont("oftext")			
+            ofmwarmvcbhealthforkills:SetConVar("of_healthforkills")										
+            ofmwarmvcbhealthforkills:SizeToContents()
+
+            local ofmwarmvcbhealthforkillsvalue = vgui.Create( "DNumSlider", ofmpanel1 )
+            ofmwarmvcbhealthforkillsvalue:Dock(TOP)
+            ofmwarmvcbhealthforkillsvalue:DockMargin(2, 2, 2, 2)
+            ofmwarmvcbhealthforkillsvalue:SetText( "回血量" )
+            ofmwarmvcbhealthforkillsvalue:SetMin( 10 )
+            ofmwarmvcbhealthforkillsvalue:SetMax( 50 )
+            ofmwarmvcbhealthforkillsvalue:SetDecimals( 0 )
+            ofmwarmvcbhealthforkillsvalue:SetConVar( "of_healthforkills_value" )
+        else
+            local ofmwarmvcbconflictexistshealth1 = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbconflictexistshealth1:Dock(TOP)
+            ofmwarmvcbconflictexistshealth1:DockMargin(2, 8, 2, 4)
+            ofmwarmvcbconflictexistshealth1:SetText("你订阅了Healthrewards或Health Regeneration")
+            ofmwarmvcbconflictexistshealth1:SetFont("oftext")
+            ofmwarmvcbconflictexistshealth1:SetTextColor(whitetext)
+
+            local ofmwarmvcbconflictexistshealth2 = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbconflictexistshealth2:Dock(TOP)
+            ofmwarmvcbconflictexistshealth2:DockMargin(2, 8, 2, 4)
+            ofmwarmvcbconflictexistshealth2:SetText("会引起冲突，因此自定义血量功能被禁用了")
+            ofmwarmvcbconflictexistshealth2:SetFont("oftext")
+            ofmwarmvcbconflictexistshealth2:SetTextColor(whitetext)
+
+        end
         
 
         local ofmwarmv1_1 = vgui.Create("DLabel", ofmpanel1)
@@ -362,24 +445,44 @@ local function of_menu_open( )
         ofmwarmv1_1:SetFont("oftext")
         ofmwarmv1_1:SetTextColor(importanttextcolor)
 
+        if ConVarExists("vwarzone_enableskydive") then
+            local ofmwarmvcbskydive = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmwarmvcbskydive:Dock(TOP)
+            ofmwarmvcbskydive:DockMargin(2, 4, 2, 4)						
+            ofmwarmvcbskydive:SetText("战区空中滑行*")
+            ofmwarmvcbskydive:SetTextColor(whitetext)
+            ofmwarmvcbskydive:SetFont("oftext")				
+            ofmwarmvcbskydive:SetConVar("vwarzone_enableskydive")										
+            ofmwarmvcbskydive:SizeToContents()
+        else
+            local ofmwarmvcbskydive = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbskydive:Dock(TOP)
+            ofmwarmvcbskydive:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbskydive:SetText("（未挂载）战区空中滑行*")
+            ofmwarmvcbskydive:SetFont("oftext")
+            ofmwarmvcbskydive:SetTextColor(whitetext) 
+        end
 
-        local ofmwarmvcbskydive = ofmpanel1:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbskydive:Dock(TOP)
-        ofmwarmvcbskydive:DockMargin(2, 4, 2, 4)						
-	    ofmwarmvcbskydive:SetText("战区空中滑行*")
-        ofmwarmvcbskydive:SetTextColor(whitetext)
-        ofmwarmvcbskydive:SetFont("oftext")				
-	    ofmwarmvcbskydive:SetConVar("vwarzone_enableskydive")										
-	    ofmwarmvcbskydive:SizeToContents()
+        if ConVarExists("vwarzone_enableparachute") then
+            local ofmwarmvcbparachute = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmwarmvcbparachute:Dock(TOP)
+            ofmwarmvcbparachute:DockMargin(2, 4, 2, 4)						
+            ofmwarmvcbparachute:SetText("战区降落伞*")
+            ofmwarmvcbparachute:SetTextColor(whitetext)	
+            ofmwarmvcbparachute:SetFont("oftext")			
+            ofmwarmvcbparachute:SetConVar("vwarzone_enableparachute")										
+            ofmwarmvcbparachute:SizeToContents()
+        else
+            local ofmwarmvcbparachute = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbparachute:Dock(TOP)
+            ofmwarmvcbparachute:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbparachute:SetText("（未挂载）战区降落伞*")
+            ofmwarmvcbparachute:SetFont("oftext")
+            ofmwarmvcbparachute:SetTextColor(whitetext) 
+        end
 
-        local ofmwarmvcbparachute = ofmpanel1:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbparachute:Dock(TOP)
-        ofmwarmvcbparachute:DockMargin(2, 4, 2, 4)						
-	    ofmwarmvcbparachute:SetText("战区降落伞*")
-        ofmwarmvcbparachute:SetTextColor(whitetext)	
-        ofmwarmvcbparachute:SetFont("oftext")			
-	    ofmwarmvcbparachute:SetConVar("vwarzone_enableparachute")										
-	    ofmwarmvcbparachute:SizeToContents()
+
+
 
         local ofmwarmv1_2 = vgui.Create("DLabel", ofmpanel1)
         ofmwarmv1_2:Dock(TOP)
@@ -388,37 +491,79 @@ local function of_menu_open( )
         ofmwarmv1_2:SetFont("oftext")
         ofmwarmv1_2:SetTextColor(importanttextcolor)
 
-        local ofmwarmvcbarc = vgui.Create("DButton", ofmpanel1)
-        ofmwarmvcbarc:SetText("ARC放射菜单设置*")
-        ofmwarmvcbarc:Dock(TOP)
-        ofmwarmvcbarc:DockMargin(2, 4, 2, 4)
-        ofmwarmvcbarc.DoClick = function()
-            RunConsoleCommand( "ARC_RADIAL_CUSTOMIZE")
+
+        local AddonExistarcradialcustomize = file.Exists("lua/autorun/cl_arctic_radial_menu.lua","GAME")
+
+        if AddonExistarcradialcustomize == true then
+            local ofmwarmvcbarc = vgui.Create("DButton", ofmpanel1)
+            ofmwarmvcbarc:SetText("ARC放射菜单设置*")
+            ofmwarmvcbarc:Dock(TOP)
+            ofmwarmvcbarc:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbarc.DoClick = function()
+                RunConsoleCommand( "arc_radial_customize")
+            end
+        else
+            local ofmwarmvcbarc = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbarc:Dock(TOP)
+            ofmwarmvcbarc:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbarc:SetText("（未安装）ARC放射菜单设置*")
+            ofmwarmvcbarc:SetFont("oftext")
+            ofmwarmvcbarc:SetTextColor(whitetext) 
         end
 
-        local ofmwarmvcbwped = vgui.Create("DButton", ofmpanel1)
-        ofmwarmvcbwped:SetText("武器编辑替换工具*")
-        ofmwarmvcbwped:Dock(TOP)
-        ofmwarmvcbwped:DockMargin(2, 4, 2, 4)
-        ofmwarmvcbwped.DoClick = function()
-            RunConsoleCommand( "weapon_properties_editor")
+        if concommand.GetTable()["weapon_properties_editor"] then
+            local ofmwarmvcbwped = vgui.Create("DButton", ofmpanel1)
+            ofmwarmvcbwped:SetText("武器编辑替换工具*")
+            ofmwarmvcbwped:Dock(TOP)
+            ofmwarmvcbwped:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbwped.DoClick = function()
+                RunConsoleCommand( "weapon_properties_editor")
+            end
+        else
+            local ofmwarmvcbwped = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbwped:Dock(TOP)
+            ofmwarmvcbwped:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbwped:SetText("（未挂载）武器编辑替换工具*")
+            ofmwarmvcbwped:SetFont("oftext")
+            ofmwarmvcbwped:SetTextColor(whitetext) 
         end
 
-        local ofmwarmvcbnmrg = vgui.Create("DButton", ofmpanel1)
-        ofmwarmvcbnmrg:SetText("NPC模型随机化设置*")
-        ofmwarmvcbnmrg:Dock(TOP)
-        ofmwarmvcbnmrg:DockMargin(2, 4, 2, 4)
-        ofmwarmvcbnmrg.DoClick = function()
-            RunConsoleCommand( "npc_model_randomizer_gui")
+        if concommand.GetTable()["npc_model_randomizer_gui"] then
+            local ofmwarmvcbnmrg = vgui.Create("DButton", ofmpanel1)
+            ofmwarmvcbnmrg:SetText("NPC模型随机化设置*")
+            ofmwarmvcbnmrg:Dock(TOP)
+            ofmwarmvcbnmrg:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbnmrg.DoClick = function()
+                RunConsoleCommand( "npc_model_randomizer_gui")
+            end
+        else
+            local ofmwarmvcbnmrg = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbnmrg:Dock(TOP)
+            ofmwarmvcbnmrg:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbnmrg:SetText("（未挂载）NPC模型随机化设置*")
+            ofmwarmvcbnmrg:SetFont("oftext")
+            ofmwarmvcbnmrg:SetTextColor(whitetext) 
         end
 
-        local ofmwarmvcbzmsgm = vgui.Create("DButton", ofmpanel1)
-        ofmwarmvcbzmsgm:SetText("NPC自动生成器设置*")
-        ofmwarmvcbzmsgm:Dock(TOP)
-        ofmwarmvcbzmsgm:DockMargin(2, 4, 2, 4)
-        ofmwarmvcbzmsgm.DoClick = function()
-            RunConsoleCommand( "zippy_map_spawner_group_menu")
+        if concommand.GetTable()["zippy_map_spawner_group_menu"] then
+            local ofmwarmvcbzmsgm = vgui.Create("DButton", ofmpanel1)
+            ofmwarmvcbzmsgm:SetText("NPC自动生成器设置*")
+            ofmwarmvcbzmsgm:Dock(TOP)
+            ofmwarmvcbzmsgm:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbzmsgm.DoClick = function()
+                RunConsoleCommand( "zippy_map_spawner_group_menu")
+            end
+        else
+            local ofmwarmvcbzmsgm = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbzmsgm:Dock(TOP)
+            ofmwarmvcbzmsgm:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbzmsgm:SetText("（未挂载）NPC自动生成器设置*")
+            ofmwarmvcbzmsgm:SetFont("oftext")
+            ofmwarmvcbzmsgm:SetTextColor(whitetext) 
         end
+
+
+
 
         
 
@@ -456,6 +601,8 @@ local function of_menu_open( )
         -- ofmwarmvcbsboxmrg:SetDecimals( 0 )
         -- ofmwarmvcbsboxmrg:SetConVar( "sbox_maxragdolls" )
 
+
+
         
 
         local ofmwarmv2 = vgui.Create("DLabel", ofmpanel2)
@@ -465,60 +612,118 @@ local function of_menu_open( )
         ofmwarmv2:SetFont("oftext")
         ofmwarmv2:SetTextColor(importanttextcolor)
 
-        local ofmwarmvcbrc = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbrc:Dock(TOP)
-        ofmwarmvcbrc:DockMargin(2, 4, 2, 4)						
-	    ofmwarmvcbrc:SetText("F.E.A.R AI*")
-        ofmwarmvcbrc:SetTextColor(whitetext)
-        ofmwarmvcbrc:SetFont("oftext")				
-	    ofmwarmvcbrc:SetConVar("kn_realistic_combine")										
-	    ofmwarmvcbrc:SizeToContents()
+        if ConVarExists("kn_realistic_combine") then
+            local ofmwarmvcbrc = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbrc:Dock(TOP)
+            ofmwarmvcbrc:DockMargin(2, 4, 2, 4)						
+            ofmwarmvcbrc:SetText("F.E.A.R AI*")
+            ofmwarmvcbrc:SetTextColor(whitetext)
+            ofmwarmvcbrc:SetFont("oftext")				
+            ofmwarmvcbrc:SetConVar("kn_realistic_combine")										
+            ofmwarmvcbrc:SizeToContents()
+        else
+            local ofmwarmvcbrc = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbrc:Dock(TOP)
+            ofmwarmvcbrc:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbrc:SetText("（未挂载）F.E.A.R AI*")
+            ofmwarmvcbrc:SetFont("oftext")
+            ofmwarmvcbrc:SetTextColor(whitetext) 
+        end
 
-        local ofmwarmvcbse = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbse:Dock(TOP)
-        ofmwarmvcbse:DockMargin(2, 4, 2, 4)						
-	    ofmwarmvcbse:SetText("Sninctbur的AI改进*")
-        ofmwarmvcbse:SetTextColor(whitetext)
-        ofmwarmvcbse:SetFont("oftext")				
-	    ofmwarmvcbse:SetConVar("saii_enabled")										
-	    ofmwarmvcbse:SizeToContents()
+        if ConVarExists("saii_enabled") then
+            local ofmwarmvcbse = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbse:Dock(TOP)
+            ofmwarmvcbse:DockMargin(2, 4, 2, 4)						
+            ofmwarmvcbse:SetText("Sninctbur的AI改进*")
+            ofmwarmvcbse:SetTextColor(whitetext)
+            ofmwarmvcbse:SetFont("oftext")				
+            ofmwarmvcbse:SetConVar("saii_enabled")										
+            ofmwarmvcbse:SizeToContents()
+        else
+            local ofmwarmvcbse = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbse:Dock(TOP)
+            ofmwarmvcbse:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbse:SetText("（未挂载）Sninctbur的AI改进*")
+            ofmwarmvcbse:SetFont("oftext")
+            ofmwarmvcbse:SetTextColor(whitetext) 
+        end
 
-        local ofmwarmvcbnn = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbnn:Dock(TOP)
-        ofmwarmvcbnn:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbnn:SetText("NPC用导航网格作为路点寻路*")
-        ofmwarmvcbnn:SetTextColor(whitetext)
-        ofmwarmvcbnn:SetFont("oftext")				
-	    ofmwarmvcbnn:SetConVar("z_npc_nav_enabled")										
-	    ofmwarmvcbnn:SizeToContents()
+        if ConVarExists("z_npc_nav_enabled") then
+            local ofmwarmvcbnn = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbnn:Dock(TOP)
+            ofmwarmvcbnn:DockMargin(2, 4, 2, 4)					
+            ofmwarmvcbnn:SetText("NPC用导航网格作为路点寻路*")
+            ofmwarmvcbnn:SetTextColor(whitetext)
+            ofmwarmvcbnn:SetFont("oftext")				
+            ofmwarmvcbnn:SetConVar("z_npc_nav_enabled")										
+            ofmwarmvcbnn:SizeToContents()
+        else
+            local ofmwarmvcbnn = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbnn:Dock(TOP)
+            ofmwarmvcbnn:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbnn:SetText("（未挂载）NPC用导航网格寻路*")
+            ofmwarmvcbnn:SetFont("oftext")
+            ofmwarmvcbnn:SetTextColor(whitetext) 
+        end
+
         
-        local ofmwarmvcbbgn = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbbgn:Dock(TOP)
-        ofmwarmvcbbgn:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbbgn:SetText("背景NPC（需要导航网格）*")
-        ofmwarmvcbbgn:SetTextColor(whitetext)
-        ofmwarmvcbbgn:SetFont("oftext")				
-	    ofmwarmvcbbgn:SetConVar("bgn_enable")										
-	    ofmwarmvcbbgn:SizeToContents()
+        if ConVarExists("bgn_enable") then
+            local ofmwarmvcbbgn = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbbgn:Dock(TOP)
+            ofmwarmvcbbgn:DockMargin(2, 4, 2, 4)					
+            ofmwarmvcbbgn:SetText("背景NPC（需要导航网格）*")
+            ofmwarmvcbbgn:SetTextColor(whitetext)
+            ofmwarmvcbbgn:SetFont("oftext")				
+            ofmwarmvcbbgn:SetConVar("bgn_enable")										
+            ofmwarmvcbbgn:SizeToContents()
+        else
+            local ofmwarmvcbbgn = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbbgn:Dock(TOP)
+            ofmwarmvcbbgn:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbbgn:SetText("（未挂载）背景NPC（需要导航网格）*")
+            ofmwarmvcbbgn:SetFont("oftext")
+            ofmwarmvcbbgn:SetTextColor(whitetext) 
+        end
+
+        if ConVarExists("arc9_npc_autoreplace") then
+            local ofmwarmvcbarc9wp = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbarc9wp:Dock(TOP)
+            ofmwarmvcbarc9wp:DockMargin(2, 4, 2, 4)					
+            ofmwarmvcbarc9wp:SetText("NPC原版武器替换为同类ARC9武器*")
+            ofmwarmvcbarc9wp:SetTextColor(whitetext)
+            ofmwarmvcbarc9wp:SetFont("oftext")				
+            ofmwarmvcbarc9wp:SetConVar("arc9_npc_autoreplace")										
+            ofmwarmvcbarc9wp:SizeToContents()
+        else
+            local ofmwarmvcbarc9wp = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbarc9wp:Dock(TOP)
+            ofmwarmvcbarc9wp:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbarc9wp:SetText("（未挂载）NPC分发ARC9武器*")
+            ofmwarmvcbarc9wp:SetFont("oftext")
+            ofmwarmvcbarc9wp:SetTextColor(whitetext) 
+        end
+
+        if ConVarExists("arccw_npc_replace") then
+            local ofmwarmvcbarccwwp = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbarccwwp:Dock(TOP)
+            ofmwarmvcbarccwwp:DockMargin(2, 4, 2, 4)					
+            ofmwarmvcbarccwwp:SetText("NPC原版武器替换为同类ARCCW武器*")
+            ofmwarmvcbarccwwp:SetTextColor(whitetext)
+            ofmwarmvcbarccwwp:SetFont("oftext")				
+            ofmwarmvcbarccwwp:SetConVar("arccw_npc_replace")										
+            ofmwarmvcbarccwwp:SizeToContents()
+        else
+            local ofmwarmvcbarccwwp = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbarccwwp:Dock(TOP)
+            ofmwarmvcbarccwwp:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbarccwwp:SetText("（未挂载）NPC分发ARCCW武器*")
+            ofmwarmvcbarccwwp:SetFont("oftext")
+            ofmwarmvcbarccwwp:SetTextColor(whitetext) 
+        end        
+
         
 
-        local ofmwarmvcbarc9wp = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbarc9wp:Dock(TOP)
-        ofmwarmvcbarc9wp:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbarc9wp:SetText("NPC原版武器替换为同类ARC9武器*")
-        ofmwarmvcbarc9wp:SetTextColor(whitetext)
-        ofmwarmvcbarc9wp:SetFont("oftext")				
-	    ofmwarmvcbarc9wp:SetConVar("arc9_npc_autoreplace")										
-	    ofmwarmvcbarc9wp:SizeToContents()
 
-        local ofmwarmvcbarccwwp = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbarccwwp:Dock(TOP)
-        ofmwarmvcbarccwwp:DockMargin(2, 4, 2, 4)					
-	    ofmwarmvcbarccwwp:SetText("NPC原版武器替换为同类ARCCW武器*")
-        ofmwarmvcbarccwwp:SetTextColor(whitetext)
-        ofmwarmvcbarccwwp:SetFont("oftext")				
-	    ofmwarmvcbarccwwp:SetConVar("arccw_npc_replace")										
-	    ofmwarmvcbarccwwp:SizeToContents()
 
         -- local ofmwarmvcbtfawp = ofmpanel2:Add( "DCheckBoxLabel" )
 	    -- ofmwarmvcbtfawp:Dock(TOP)
@@ -749,30 +954,41 @@ local function of_menu_open( )
 
         
 
+        local AddonExistnpcmodelrandomizer = file.Exists("lua/autorun/froze_combine_s_model_randomizer.lua","GAME")
 
+        if AddonExistnpcmodelrandomizer == true then
+            local ofmwarmvcbrsr = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbrsr:Dock(TOP)
+            ofmwarmvcbrsr:DockMargin(2, 4, 2, 4)						
+            ofmwarmvcbrsr:SetText("NPC随机皮肤*")
+            ofmwarmvcbrsr:SetTextColor(whitetext)
+            ofmwarmvcbrsr:SetFont("oftext")			
+            ofmwarmvcbrsr:SetConVar("npc_model_randomizer_skin_random")										
+            ofmwarmvcbrsr:SizeToContents()
 
-        local ofmwarmvcbrsr = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbrsr:Dock(TOP)
-        ofmwarmvcbrsr:DockMargin(2, 4, 2, 4)						
-	    ofmwarmvcbrsr:SetText("NPC随机皮肤*")
-        ofmwarmvcbrsr:SetTextColor(whitetext)
-        ofmwarmvcbrsr:SetFont("oftext")			
-	    ofmwarmvcbrsr:SetConVar("npc_model_randomizer_skin_random")										
-	    ofmwarmvcbrsr:SizeToContents()
+            local ofmwarmvcbrbr = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbrbr:Dock(TOP)
+            ofmwarmvcbrbr:DockMargin(2, 4, 2, 4)						
+            ofmwarmvcbrbr:SetText("NPC随机身体组件*")
+            ofmwarmvcbrbr:SetTextColor(whitetext)
+            ofmwarmvcbrbr:SetFont("oftext")					
+            ofmwarmvcbrbr:SetConVar("npc_model_randomizer_bodygroups_random")										
+            ofmwarmvcbrbr:SizeToContents()
+        else
+            local ofmwarmvcbrsr = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbrsr:Dock(TOP)
+            ofmwarmvcbrsr:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbrsr:SetText("（未安装）NPC随机皮肤*")
+            ofmwarmvcbrsr:SetFont("oftext")
+            ofmwarmvcbrsr:SetTextColor(whitetext) 
 
-        local ofmwarmvcbrbr = ofmpanel2:Add( "DCheckBoxLabel" )
-	    ofmwarmvcbrbr:Dock(TOP)
-        ofmwarmvcbrbr:DockMargin(2, 4, 2, 4)						
-	    ofmwarmvcbrbr:SetText("NPC随机身体组件*")
-        ofmwarmvcbrbr:SetTextColor(whitetext)
-        ofmwarmvcbrbr:SetFont("oftext")					
-	    ofmwarmvcbrbr:SetConVar("npc_model_randomizer_bodygroups_random")										
-	    ofmwarmvcbrbr:SizeToContents()
-
-        
-
-        
-
+            local ofmwarmvcbrbr = vgui.Create("DLabel", ofmpanel2)
+            ofmwarmvcbrbr:Dock(TOP)
+            ofmwarmvcbrbr:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbrbr:SetText("（未安装）NPC随机身体组件*")
+            ofmwarmvcbrbr:SetFont("oftext")
+            ofmwarmvcbrbr:SetTextColor(whitetext) 
+        end
     end
 
 
@@ -1001,14 +1217,24 @@ local function of_menu_open( )
             draw.RoundedBox(8, 0, 0, w, h, Color(0, 30, 255, 0))
         end
 
-        local ofmmmdbio = ofmpanel1:Add( "DCheckBoxLabel" )
-        ofmmmdbio:Dock(TOP)
-        ofmmmdbio:DockMargin(2, 4, 2, 4)					
-	    ofmmmdbio:SetText("显示地图实体与输入/输出*")
-        ofmmmdbio:SetTextColor(whitetext)
-        ofmmmdbio:SetFont("oftext")				
-	    ofmmmdbio:SetConVar("sv_drawmapio")									
-	    ofmmmdbio:SizeToContents()
+        if ConVarExists("sv_drawmapio") then
+            local ofmmmdbio = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmmmdbio:Dock(TOP)
+            ofmmmdbio:DockMargin(2, 4, 2, 4)					
+            ofmmmdbio:SetText("显示地图实体与输入/输出*")
+            ofmmmdbio:SetTextColor(whitetext)
+            ofmmmdbio:SetFont("oftext")				
+            ofmmmdbio:SetConVar("sv_drawmapio")									
+            ofmmmdbio:SizeToContents()
+        else
+            local ofmmmdbio = vgui.Create("DLabel", ofmpanel1)
+            ofmmmdbio:Dock(TOP)
+            ofmmmdbio:DockMargin(2, 4, 2, 4)
+            ofmmmdbio:SetText("（未挂载）显示地图实体与输入/输出*")
+            ofmmmdbio:SetFont("oftext")
+            ofmmmdbio:SetTextColor(whitetext) 
+        end 
+
         
         local ofmmmdbskybox = ofmpanel1:Add( "DCheckBoxLabel" )
         ofmmmdbskybox:Dock(TOP)
@@ -1176,59 +1402,70 @@ local function of_menu_open( )
         ofmmmnmedatngt:SetFont("oftext")
         ofmmmnmedatngt:SetTextColor(whitetext)
 
+        local AddonExistnavmeshmerger = file.Exists("lua/autorun/server/navmesh_merger.lua","GAME")
+
+        if AddonExistnavmeshmerger == true then
+            local ofmmmnmedatngc = vgui.Create("DButton", ofmpanel2)
+            ofmmmnmedatngc:SetText("快速绘制*")
+            ofmmmnmedatngc:Dock(TOP)
+            ofmmmnmedatngc:DockMargin(2, 8, 2, 8)
+            ofmmmnmedatngc:SetIcon( "icon16/flag_green.png" )
+            ofmmmnmedatngc.DoClick = function()
+                RunConsoleCommand( "nav_generate_cheap")
+            end
+            
 
 
-        local ofmmmnmedatngc = vgui.Create("DButton", ofmpanel2)
-        ofmmmnmedatngc:SetText("快速绘制*")
-        ofmmmnmedatngc:Dock(TOP)
-        ofmmmnmedatngc:DockMargin(2, 8, 2, 8)
-        ofmmmnmedatngc:SetIcon( "icon16/flag_green.png" )
-        ofmmmnmedatngc.DoClick = function()
-            RunConsoleCommand( "nav_generate_cheap")
-        end
+            local ofmmmnmedatngct = vgui.Create("DLabel", ofmpanel2)
+            ofmmmnmedatngct:Dock(TOP)
+            ofmmmnmedatngct:DockMargin(2, 4, 2, 4)
+            ofmmmnmedatngct:SetText("快速廉价的绘制方法，但是文件可能会很大")
+            ofmmmnmedatngct:SetFont("oftext")
+            ofmmmnmedatngct:SetTextColor(whitetext)
 
-        local ofmmmnmedatngct = vgui.Create("DLabel", ofmpanel2)
-        ofmmmnmedatngct:Dock(TOP)
-        ofmmmnmedatngct:DockMargin(2, 4, 2, 4)
-        ofmmmnmedatngct:SetText("快速廉价的绘制方法，但是文件可能会很大")
-        ofmmmnmedatngct:SetFont("oftext")
-        ofmmmnmedatngct:SetTextColor(whitetext)
+            local ofmmmnmedatnge = vgui.Create("DButton", ofmpanel2)
+            ofmmmnmedatnge:SetText("高级绘制*")
+            ofmmmnmedatnge:Dock(TOP)
+            ofmmmnmedatnge:DockMargin(2, 8, 2, 8)
+            ofmmmnmedatnge:SetIcon( "icon16/flag_red.png" )
+            ofmmmnmedatnge.DoClick = function()
+                RunConsoleCommand( "nav_generate_expanded")
+            end
 
 
-        local ofmmmnmedatnge = vgui.Create("DButton", ofmpanel2)
-        ofmmmnmedatnge:SetText("高级绘制*")
-        ofmmmnmedatnge:Dock(TOP)
-        ofmmmnmedatnge:DockMargin(2, 8, 2, 8)
-        ofmmmnmedatnge:SetIcon( "icon16/flag_red.png" )
-        ofmmmnmedatnge.DoClick = function()
-            RunConsoleCommand( "nav_generate_expanded")
-        end
+            local ofmmmnmedatnget = vgui.Create("DLabel", ofmpanel2)
+            ofmmmnmedatnget:Dock(TOP)
+            ofmmmnmedatnget:DockMargin(2, 4, 2, 4)
+            ofmmmnmedatnget:SetText("昂贵且高效的绘制方法")
+            ofmmmnmedatnget:SetFont("oftext")
+            ofmmmnmedatnget:SetTextColor(whitetext)
 
-        local ofmmmnmedatnget = vgui.Create("DLabel", ofmpanel2)
-        ofmmmnmedatnget:Dock(TOP)
-        ofmmmnmedatnget:DockMargin(2, 4, 2, 4)
-        ofmmmnmedatnget:SetText("昂贵且高效的绘制方法")
-        ofmmmnmedatnget:SetFont("oftext")
-        ofmmmnmedatnget:SetTextColor(whitetext)
+            local ofmmmnmedatnga = vgui.Create("DButton", ofmpanel2)
+            ofmmmnmedatnga:SetText("自动合并导航网格*")
+            ofmmmnmedatnga:Dock(TOP)
+            ofmmmnmedatnga:DockMargin(2, 8, 2, 8)
+            ofmmmnmedatnga:SetIcon( "icon16/chart_line_link.png" )
+            ofmmmnmedatnga.DoClick = function()
+                RunConsoleCommand( "navmesh_globalmerge_auto")
+            end
 
-        local ofmmmnmedatnga = vgui.Create("DButton", ofmpanel2)
-        ofmmmnmedatnga:SetText("自动合并导航网格*")
-        ofmmmnmedatnga:Dock(TOP)
-        ofmmmnmedatnga:DockMargin(2, 8, 2, 8)
-        ofmmmnmedatnga:SetIcon( "icon16/chart_line_link.png" )
-        ofmmmnmedatnga.DoClick = function()
-            RunConsoleCommand( "navmesh_globalmerge_auto")
-        end
-
-        local ofmmmnmedatngat = vgui.Create("DLabel", ofmpanel2)
-        ofmmmnmedatngat:Dock(TOP)
-        ofmmmnmedatngat:DockMargin(2, 4, 2, 4)
-        ofmmmnmedatngat:SetText("智能合并和分析导航网格，优化地图")
-        ofmmmnmedatngat:SetFont("oftext")
-        ofmmmnmedatngat:SetTextColor(whitetext)
+            local ofmmmnmedatngat = vgui.Create("DLabel", ofmpanel2)
+            ofmmmnmedatngat:Dock(TOP)
+            ofmmmnmedatngat:DockMargin(2, 4, 2, 4)
+            ofmmmnmedatngat:SetText("智能合并和分析导航网格，优化地图")
+            ofmmmnmedatngat:SetFont("oftext")
+            ofmmmnmedatngat:SetTextColor(whitetext)
+        else
+            local ofmmmnmedatnga = vgui.Create("DLabel", ofmpanel2)
+            ofmmmnmedatnga:Dock(TOP)
+            ofmmmnmedatnga:DockMargin(2, 4, 2, 4)
+            ofmmmnmedatnga:SetText("（未安装）自动合并导航网格*")
+            ofmmmnmedatnga:SetFont("oftext")
+            ofmmmnmedatnga:SetTextColor(whitetext) 
+        end    
 
         local ofmmmnmedatbc = vgui.Create("DButton", ofmpanel2)
-        ofmmmnmedatbc:SetText("构建立方体贴图*")
+        ofmmmnmedatbc:SetText("构建立方体贴图")
         ofmmmnmedatbc:Dock(TOP)
         ofmmmnmedatbc:DockMargin(2, 8, 2, 8)
         ofmmmnmedatbc:SetIcon( "icon16/contrast.png" )
@@ -1461,6 +1698,13 @@ local function of_menu_open( )
         ofmdvipmainhelprichtext1:AppendText("\nof_death \n[指令] 瞬移到上次死亡的地方\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_teleportsave \n[指令] 保存位置\n")
         ofmdvipmainhelprichtext1:AppendText("\nof_teleport \n[指令] 瞬移到上次保存的地方\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_overridehealth \n[控制台变量] 值为“1”时覆写玩家血量\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_overridehealthvalue \n[控制台变量] 自定义血量值\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_healthforkills \n[控制台变量] 值为“1”时开启杀敌回血\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_healthforkills_value \n[控制台变量] 杀死NPC或玩家获得的生命值增益量\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_healthregen \n[控制台变量] 值为“1”时开启回血\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_healthregen_speed \n[控制台变量] 回血速度\n")
+        ofmdvipmainhelprichtext1:AppendText("\nof_healthregen_delay \n[控制台变量] 回血延迟\n")
         
         
         
@@ -1565,7 +1809,9 @@ local function of_menu_open( )
         ofmbugreportrichtext2:DockPadding(8, 4, 8, 4)
         ofmbugreportrichtext2:SetSize(xxp, yyp*2/5) 
         ofmbugreportrichtext2:InsertColorChange( 255, 255, 255, 255 )
-        ofmbugreportrichtext2:AppendText("2023.6.18\nGlobex（Steam）\n反馈订阅后没法单独隐藏hud的漏洞（已修复）\n反馈受支持但没安装的模组对应的选项在菜单里显示为已开启并没有办法关闭的漏洞（未修复）\n（这个漏洞虽然不影响功能但是容易误导玩家，应当重视）\n反馈工具箱会导致csm失效的漏洞（修复了。。。应该吧）\n建议增加MWB配件保存，NPC死亡人数过多自动后撤，实体爆炸，NPC自相残杀，优化帧数，全亮模式分级，调整NPC透视距离功能\n（建议有些多w(ﾟДﾟ)w某些功能以后再看吧）\n\nXiaoHappyEnd（B站）\n反馈订阅后没法单独隐藏hud的漏洞（已经修复）\n")
+        ofmbugreportrichtext2:AppendText("2023.6.28\nnoob7236（B站）\n建议增加关于伤害类的修改\n")
+        ofmbugreportrichtext2:AppendText("\n2023.6.27\n斫青客（B站）\n建议增加快捷调整时间流速的指令绑定\n")
+        ofmbugreportrichtext2:AppendText("\n2023.6.18\nGlobex（Steam）\n反馈订阅后没法单独隐藏hud的漏洞（已修复）\n反馈受支持但没安装的模组对应的选项在菜单里显示为已开启并没有办法关闭的漏洞（未修复）\n（这个漏洞虽然不影响功能但是容易误导玩家，应当重视）\n反馈工具箱会导致csm失效的漏洞（修复了。。。应该吧）\n建议增加MWB配件保存，NPC死亡人数过多自动后撤，实体爆炸，NPC自相残杀，优化帧数，全亮模式分级，调整NPC透视距离功能\n（建议有些多w(ﾟДﾟ)w某些功能以后再看吧）\n\nXiaoHappyEnd（B站）\n反馈订阅后没法单独隐藏hud的漏洞（已经修复）\n")
         ofmbugreportrichtext2:AppendText("\n2023.6.16\n爱打电动的汁子（B站）\n建议增加NPC替换TFA武器的选项（完成了一半）\n")
         
 

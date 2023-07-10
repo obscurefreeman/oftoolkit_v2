@@ -17,6 +17,7 @@ CreateConVar( "of_thirdperson", "1", 0, "" )	--显示第三人称模型
 CreateConVar( "of_setasrespawn", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )	--死后设为出生点
 CreateConVar( "of_spawngod", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )	--3秒无敌
 CreateConVar( "of_explodafterdeath", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )	--死后原地爆炸
+
 --CreateConVar( "of_allowweaponsinvehicle", "0", 0, "" )	--载具允许武器
 
 --CreateConVar( "nb_stop", "1", 0, "" )		--NEXTBOT
@@ -35,12 +36,12 @@ CreateConVar( "npc_model_randomizer_combine_s", "1", 0, "" )
 CreateConVar( "npc_model_randomizer_citizen", "1", 0, "" )
 CreateConVar( "npc_model_randomizer_metropolice", "1", 0, "" )
 
-CreateConVar( "sv_drawmapio", "1", 0, "" )		--合并路点
+-- CreateConVar( "sv_drawmapio", "1", 0, "" )		--合并路点
 
---CreateConVar( "kn_realistic_combine", "1", 0, "" )		--智能联合军
+-- --CreateConVar( "kn_realistic_combine", "1", 0, "" )		--智能联合军
 
-CreateConVar( "z_npc_nav_enabled" , "1", 0, "" )		--寻路
---CreateConVar( "of_tfa_weapon" , "0", { FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--tfa武器
+-- CreateConVar( "z_npc_nav_enabled" , "1", 0, "" )		--寻路
+-- --CreateConVar( "of_tfa_weapon" , "0", { FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--tfa武器
 
 CreateConVar( "of_menu_customize_faded_black" , "115",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "",0,255 )
 CreateConVar( "of_menu_customize_panel" , "103",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "",0,255  )
@@ -204,12 +205,16 @@ hook.Add("PlayerDeath", "of_explodafterdeathhook", function(ply)  --死后爆炸
 		ent:SetPos( ply:GetPos() )
 		ent:SetOwner( ply )
 		ent:SetKeyValue("iMagnitude","300")
-		ent:Spawn()  				 --放
+		ent:Spawn()
 		ent:Fire("Explode", 0, 0 )
 		
 		
 	else end
 end)
+
+
+
+
 
 
 
@@ -268,7 +273,7 @@ concommand.Add( "of_drawtp", function( ply )
 end )
 ]]--
 concommand.Add( "of_hpp", function( ply )	--暴力加血
-	ply:SetHealth( ply:Health() + 100 )
+	ply:SetHealth( ply:Health() + 1000 )
 	ply:ChatPrint("快速加血成功，你的生命值现在是："  ..   ply:Health()  )
 end )
 
