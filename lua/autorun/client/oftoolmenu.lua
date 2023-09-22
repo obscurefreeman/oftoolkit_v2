@@ -109,7 +109,7 @@ local function of_menu_open( )
     local of_menu = vgui.Create("DFrame")
     of_menu:SetSize(800*xx, 600*yy)
     of_menu:Center()
-    of_menu:SetTitle("晦涩弗里曼的工具箱V2.1.9")
+    of_menu:SetTitle("晦涩弗里曼的工具箱V2.2.0")
     of_menu:SetDraggable(true)
     of_menu:MakePopup()
     of_menu:SetSizable(true)
@@ -207,7 +207,7 @@ local function of_menu_open( )
     ofmwellcomenews:SetSize(xxp, yyp/9) 
     ofmwellcomenews:DockPadding(8, 4, 8, 4)
     ofmwellcomenews:SetFont("oftextlarge") 
-    ofmwellcomenews:SetText("新地图现已推出！")
+    ofmwellcomenews:SetText("新闻！")
     ofmwellcomenews:SetTextColor(importanttextcolor)
 
     local ofmwellcomeud = vgui.Create( "RichText", ofmpanel )
@@ -215,6 +215,8 @@ local function of_menu_open( )
     ofmwellcomeud:DockPadding(8, 4, 8, 4)
     ofmwellcomeud:SetSize(xxp, yyp/3) 
     ofmwellcomeud:InsertColorChange( 255, 255, 255, 255 )
+    ofmwellcomeud:AppendText("2023.9.22 \n小型更新，增加了修改服务器游戏设置的功能\n（你可以直接在游戏里调整服务器的设置，不用担心开始游戏的时候勾选错了），\n模组支持新增无限子弹一键开关！\n此外，开发者可以使用的工具也增加了，可以一键显示材质开销，列出界面UI元素\n部分界面经过调整，使用舒适度增加\n")
+    ofmwellcomeud:AppendText("2023.9.12 \n我的《异形丛生》地图发布了！用俯视射击游戏打CSGO地图是什么样的呢？\n进创意工坊搜：[Deathmatch]Lake from csgo\n")
     ofmwellcomeud:AppendText("2023.7.10 \n中型更新，增加了覆写玩家血量,自动回血，杀敌回血的功能\n并且现在没有挂载的模组会提示未挂载\n（这个功能可能会引起未知bug，如果在游戏里发现相关问题，请及时汇报）\n此外，新地图光华高中周年纪念版现已推出！请前往创意工坊下载！\n")
     ofmwellcomeud:AppendText("2023.6.19 \n修复了菜单卡移动的问题，（现在你可以自由移动了）增加背景NPC模组支持\n调整了菜单右侧的颜色以适应其他个性化主题，调整部分文字使其更易于理解\n修复隐藏多余UI覆盖原版隐藏hud功能的Bug以及无法单独隐藏地图细节的Bug\n添加TFA和TacRP武器替换的选项（这个东西我弄了好久），增加问题反馈界面\n")
     ofmwellcomeud:AppendText("2023.6.10 \n小型更新发布，支持NPC自动生成器，部分代码已改进\n")
@@ -334,6 +336,24 @@ local function of_menu_open( )
         ofmwarmvcbgod:SetFont("oftext")				
 	    ofmwarmvcbgod:SetConVar("of_god")										
 	    ofmwarmvcbgod:SizeToContents()
+        
+        if ConVarExists("sv_infinite_ammo") then
+            local ofmwarmvcbinfiniteammo = ofmpanel1:Add( "DCheckBoxLabel" )
+            ofmwarmvcbinfiniteammo:Dock(TOP)
+            ofmwarmvcbinfiniteammo:DockMargin(2, 4, 2, 4)					
+            ofmwarmvcbinfiniteammo:SetText("无限弹药*")
+            ofmwarmvcbinfiniteammo:SetTextColor(whitetext)
+            ofmwarmvcbinfiniteammo:SetFont("oftext")				
+            ofmwarmvcbinfiniteammo:SetConVar("sv_infinite_ammo")										
+            ofmwarmvcbinfiniteammo:SizeToContents()
+        else
+            local ofmwarmvcbinfiniteammo = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbinfiniteammo:Dock(TOP)
+            ofmwarmvcbinfiniteammo:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbinfiniteammo:SetText("（未挂载）无限弹药*")
+            ofmwarmvcbinfiniteammo:SetFont("oftext")
+            ofmwarmvcbinfiniteammo:SetTextColor(whitetext) 
+        end
 
         local ofmwarmvcballowweaponsinvehicle = ofmpanel1:Add( "DCheckBoxLabel" )
 	    ofmwarmvcballowweaponsinvehicle:Dock(TOP)
@@ -343,24 +363,6 @@ local function of_menu_open( )
         ofmwarmvcballowweaponsinvehicle:SetFont("oftext")				
 	    ofmwarmvcballowweaponsinvehicle:SetConVar("of_allowweaponsinvehicle")										
 	    ofmwarmvcballowweaponsinvehicle:SizeToContents()
-
-        if ConVarExists("arc9_replace_spawned") then
-            local ofmwarmvcbarc9rs = ofmpanel1:Add( "DCheckBoxLabel" )
-            ofmwarmvcbarc9rs:Dock(TOP)
-            ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)					
-            ofmwarmvcbarc9rs:SetText("ARC9替换地面武器*")
-            ofmwarmvcbarc9rs:SetTextColor(whitetext)
-            ofmwarmvcbarc9rs:SetFont("oftext")				
-            ofmwarmvcbarc9rs:SetConVar("arc9_replace_spawned")										
-            ofmwarmvcbarc9rs:SizeToContents()
-        else
-            local ofmwarmvcbarc9rs = vgui.Create("DLabel", ofmpanel1)
-            ofmwarmvcbarc9rs:Dock(TOP)
-            ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)
-            ofmwarmvcbarc9rs:SetText("（未挂载）ARC9替换地面武器*")
-            ofmwarmvcbarc9rs:SetFont("oftext")
-            ofmwarmvcbarc9rs:SetTextColor(whitetext) 
-        end
 
         local ConflictExistshealthforkills = file.Exists("lua/autorun/healthforkills.lua","GAME")
         local ConflictExistshealthregen = file.Exists("lua/autorun/healthregen.lua","GAME")
@@ -685,6 +687,24 @@ local function of_menu_open( )
             ofmwarmvcbbgn:SetTextColor(whitetext) 
         end
 
+        if ConVarExists("arc9_replace_spawned") then
+            local ofmwarmvcbarc9rs = ofmpanel2:Add( "DCheckBoxLabel" )
+            ofmwarmvcbarc9rs:Dock(TOP)
+            ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)					
+            ofmwarmvcbarc9rs:SetText("地面武器替换为ARC9武器*")
+            ofmwarmvcbarc9rs:SetTextColor(whitetext)
+            ofmwarmvcbarc9rs:SetFont("oftext")				
+            ofmwarmvcbarc9rs:SetConVar("arc9_replace_spawned")										
+            ofmwarmvcbarc9rs:SizeToContents()
+        else
+            local ofmwarmvcbarc9rs = vgui.Create("DLabel", ofmpanel1)
+            ofmwarmvcbarc9rs:Dock(TOP)
+            ofmwarmvcbarc9rs:DockMargin(2, 4, 2, 4)
+            ofmwarmvcbarc9rs:SetText("（未挂载）地面武器替换为ARC9武器*")
+            ofmwarmvcbarc9rs:SetFont("oftext")
+            ofmwarmvcbarc9rs:SetTextColor(whitetext) 
+        end
+
         if ConVarExists("arc9_npc_autoreplace") then
             local ofmwarmvcbarc9wp = ofmpanel2:Add( "DCheckBoxLabel" )
             ofmwarmvcbarc9wp:Dock(TOP)
@@ -1001,6 +1021,143 @@ local function of_menu_open( )
         ofm_warmv()
     end
 
+    local function ofm_warserver()
+        local ofmpanel1 = vgui.Create("DPanel", ofmpanel)
+        ofmpanel1:SetSize(xxp/2, yyp/2)
+        ofmpanel1:Dock(LEFT) 
+        ofmpanel1:DockPadding(2, 2, 2, 8)
+        --ofmpanel1:SetDisabled
+        ofmpanel1.Paint = function(self, w, h)
+            draw.RoundedBox(8, 0, 0, w, h, Color(255, 0, 153, 0))
+        end
+        
+        local ofmpanel2 = vgui.Create("DPanel", ofmpanel)
+        ofmpanel2:SetSize(xxp/2, yyp/2)
+        ofmpanel2:Dock(LEFT)
+        ofmpanel2:DockPadding(2, 2, 2, 8)
+        ofmpanel2.Paint = function(self, w, h)
+            draw.RoundedBox(8, 0, 0, w, h, Color(0, 30, 255, 0))
+        end
+
+        local ofmwarservert1 = vgui.Create("DLabel", ofmpanel1)
+        ofmwarservert1:Dock(TOP)
+        ofmwarservert1:DockMargin(2, 8, 2, 8)
+        ofmwarservert1:SetText("单人模式")
+        ofmwarservert1:SetFont("oftext")
+        ofmwarservert1:SetTextColor(importanttextcolor)
+
+
+
+        local ofmwarserversbox_weapons = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserversbox_weapons:Dock(TOP)
+        ofmwarserversbox_weapons:DockMargin(2, 4, 2, 4)						
+	    ofmwarserversbox_weapons:SetText("出生点武器配给")
+        ofmwarserversbox_weapons:SetTextColor(whitetext)
+        ofmwarserversbox_weapons:SetFont("oftext")			
+	    ofmwarserversbox_weapons:SetConVar("sbox_weapons")										
+	    ofmwarserversbox_weapons:SizeToContents()
+
+        local ofmwarserversbox_godmode = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserversbox_godmode:Dock(TOP)
+        ofmwarserversbox_godmode:DockMargin(2, 4, 2, 4)						
+	    ofmwarserversbox_godmode:SetText("全玩家无敌模式")
+        ofmwarserversbox_godmode:SetTextColor(whitetext)
+        ofmwarserversbox_godmode:SetFont("oftext")			
+	    ofmwarserversbox_godmode:SetConVar("sbox_godmode")										
+	    ofmwarserversbox_godmode:SizeToContents()
+
+        local ofmwarservergmod_suit = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarservergmod_suit:Dock(TOP)
+        ofmwarservergmod_suit:DockMargin(2, 4, 2, 4)						
+	    ofmwarservergmod_suit:SetText("启用防护服（体力限制）")
+        ofmwarservergmod_suit:SetTextColor(whitetext)
+        ofmwarservergmod_suit:SetFont("oftext")			
+	    ofmwarservergmod_suit:SetConVar("gmod_suit")										
+	    ofmwarservergmod_suit:SizeToContents()
+
+        local ofmwarservermp_falldamage = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarservermp_falldamage:Dock(TOP)
+        ofmwarservermp_falldamage:DockMargin(2, 4, 2, 4)						
+	    ofmwarservermp_falldamage:SetText("启用真实的跌落伤害")
+        ofmwarservermp_falldamage:SetTextColor(whitetext)
+        ofmwarservermp_falldamage:SetFont("oftext")			
+	    ofmwarservermp_falldamage:SetConVar("mp_falldamage")										
+	    ofmwarservermp_falldamage:SizeToContents()
+
+        local ofmwarservert2 = vgui.Create("DLabel", ofmpanel1)
+        ofmwarservert2:Dock(TOP)
+        ofmwarservert2:DockMargin(2, 8, 2, 8)
+        ofmwarservert2:SetText("多人模式")
+        ofmwarservert2:SetFont("oftext")
+        ofmwarservert2:SetTextColor(importanttextcolor)
+
+        local ofmwarserverphysgun_limited = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserverphysgun_limited:Dock(TOP)
+        ofmwarserverphysgun_limited:DockMargin(2, 4, 2, 4)						
+	    ofmwarserverphysgun_limited:SetText("物理枪限制")
+        ofmwarserverphysgun_limited:SetTextColor(whitetext)
+        ofmwarserverphysgun_limited:SetFont("oftext")			
+	    ofmwarserverphysgun_limited:SetConVar("physgun_limited")										
+	    ofmwarserverphysgun_limited:SizeToContents()
+
+        local ofmwarserversbox_playershurtplayers = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserversbox_playershurtplayers:Dock(TOP)
+        ofmwarserversbox_playershurtplayers:DockMargin(2, 4, 2, 4)						
+	    ofmwarserversbox_playershurtplayers:SetText("允许PVP")
+        ofmwarserversbox_playershurtplayers:SetTextColor(whitetext)
+        ofmwarserversbox_playershurtplayers:SetFont("oftext")			
+	    ofmwarserversbox_playershurtplayers:SetConVar("sbox_playershurtplayers")										
+	    ofmwarserversbox_playershurtplayers:SizeToContents()
+
+        local ofmwarserversbox_noclip = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserversbox_noclip:Dock(TOP)
+        ofmwarserversbox_noclip:DockMargin(2, 4, 2, 4)						
+	    ofmwarserversbox_noclip:SetText("允许穿墙")
+        ofmwarserversbox_noclip:SetTextColor(whitetext)
+        ofmwarserversbox_noclip:SetFont("oftext")			
+	    ofmwarserversbox_noclip:SetConVar("sbox_noclip")										
+	    ofmwarserversbox_noclip:SizeToContents()
+
+        local ofmwarserversbox_bonemanip_npc = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserversbox_bonemanip_npc:Dock(TOP)
+        ofmwarserversbox_bonemanip_npc:DockMargin(2, 4, 2, 4)						
+	    ofmwarserversbox_bonemanip_npc:SetText("允许调整NPC骨骼")
+        ofmwarserversbox_bonemanip_npc:SetTextColor(whitetext)
+        ofmwarserversbox_bonemanip_npc:SetFont("oftext")			
+	    ofmwarserversbox_bonemanip_npc:SetConVar("sbox_bonemanip_npc")										
+	    ofmwarserversbox_bonemanip_npc:SizeToContents()
+
+        local ofmwarserversbox_bonemanip_player = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserversbox_bonemanip_player:Dock(TOP)
+        ofmwarserversbox_bonemanip_player:DockMargin(2, 4, 2, 4)						
+	    ofmwarserversbox_bonemanip_player:SetText("允许调整玩家骨骼")
+        ofmwarserversbox_bonemanip_player:SetTextColor(whitetext)
+        ofmwarserversbox_bonemanip_player:SetFont("oftext")			
+	    ofmwarserversbox_bonemanip_player:SetConVar("sbox_bonemanip_player")										
+	    ofmwarserversbox_bonemanip_player:SizeToContents()
+
+        local ofmwarserversbox_bonemanip_misc = ofmpanel1:Add( "DCheckBoxLabel" )
+	    ofmwarserversbox_bonemanip_misc:Dock(TOP)
+        ofmwarserversbox_bonemanip_misc:DockMargin(2, 4, 2, 4)						
+	    ofmwarserversbox_bonemanip_misc:SetText("允许调整其他实体骨骼")
+        ofmwarserversbox_bonemanip_misc:SetTextColor(whitetext)
+        ofmwarserversbox_bonemanip_misc:SetFont("oftext")			
+	    ofmwarserversbox_bonemanip_misc:SetConVar("sbox_bonemanip_misc")										
+	    ofmwarserversbox_bonemanip_misc:SizeToContents()
+    end
+
+
+
+
+    local ofmwarserver = vgui.Create("DButton", ofmwar)
+    ofmwarserver:SetText("沙盒设定")
+    ofmwarserver:Dock(TOP)
+    ofmwarserver:DockMargin(0, 0, 0, 0)
+    ofmwarserver.DoClick = function()
+        ofm_clear()
+        ofm_warserver()
+    end
+
     local function ofm_warlc()
         local ofmpanel1 = vgui.Create("DPanel", ofmpanel)
         ofmpanel1:SetSize(xxp/2, yyp/2)
@@ -1217,6 +1374,15 @@ local function of_menu_open( )
             draw.RoundedBox(8, 0, 0, w, h, Color(0, 30, 255, 0))
         end
 
+        local ofmmmdbmf = ofmpanel1:Add( "DCheckBoxLabel" )
+        ofmmmdbmf:Dock(TOP)
+        ofmmmdbmf:DockMargin(2, 4, 2, 4)					
+	    ofmmmdbmf:SetText("全亮模式")
+        ofmmmdbmf:SetTextColor(whitetext)
+        ofmmmdbmf:SetFont("oftext")				
+	    ofmmmdbmf:SetConVar("mat_fullbright")									
+	    ofmmmdbmf:SizeToContents()
+
         if ConVarExists("sv_drawmapio") then
             local ofmmmdbio = ofmpanel1:Add( "DCheckBoxLabel" )
             ofmmmdbio:Dock(TOP)
@@ -1242,17 +1408,28 @@ local function of_menu_open( )
 	    ofmmmdbskybox:SetText("显示地图细节")
         ofmmmdbskybox:SetTextColor(whitetext)
         ofmmmdbskybox:SetFont("oftext")				
-	    ofmmmdbskybox:SetConVar("of_skybox")									
+	    ofmmmdbskybox:SetConVar("of_skybox")
 	    ofmmmdbskybox:SizeToContents()
 
-        local ofmmmdbmf = ofmpanel1:Add( "DCheckBoxLabel" )
-        ofmmmdbmf:Dock(TOP)
-        ofmmmdbmf:DockMargin(2, 4, 2, 4)					
-	    ofmmmdbmf:SetText("全亮模式")
-        ofmmmdbmf:SetTextColor(whitetext)
-        ofmmmdbmf:SetFont("oftext")				
-	    ofmmmdbmf:SetConVar("mat_fullbright")									
-	    ofmmmdbmf:SizeToContents()
+        local ofmmmdbtrigger = ofmpanel1:Add( "DCheckBoxLabel" )
+        ofmmmdbtrigger:Dock(TOP)
+        ofmmmdbtrigger:DockMargin(2, 4, 2, 4)					
+	    ofmmmdbtrigger:SetText("显示地图触发实体")
+        ofmmmdbtrigger:SetTextColor(whitetext)
+        ofmmmdbtrigger:SetFont("oftext")				
+	    ofmmmdbtrigger:SetConVar("showtriggers")									
+	    ofmmmdbtrigger:SizeToContents()
+
+        local ofmmmdbshowbudgettexture = ofmpanel1:Add( "DCheckBoxLabel" )
+        ofmmmdbshowbudgettexture:Dock(TOP)
+        ofmmmdbshowbudgettexture:DockMargin(2, 4, 2, 4)					
+	    ofmmmdbshowbudgettexture:SetText("显示材质开销")
+        ofmmmdbshowbudgettexture:SetTextColor(whitetext)
+        ofmmmdbshowbudgettexture:SetFont("oftext")				
+	    ofmmmdbshowbudgettexture:SetConVar("showbudget_texture")									
+	    ofmmmdbshowbudgettexture:SizeToContents()
+        
+
 
         local ofmmmdbfogui = vgui.Create("DButton", ofmpanel1)
         ofmmmdbfogui:SetText("雾气效果菜单")
@@ -1268,6 +1445,14 @@ local function of_menu_open( )
         ofmmmdbcolorcorrectionui:DockMargin(2, 8, 2, 8)
         ofmmmdbcolorcorrectionui.DoClick = function()
             RunConsoleCommand( "colorcorrectionui")
+        end
+
+        local ofmmmdbcolorcorrectionui = vgui.Create("DButton", ofmpanel1)
+        ofmmmdbcolorcorrectionui:SetText("显示AI路点")
+        ofmmmdbcolorcorrectionui:Dock(TOP)
+        ofmmmdbcolorcorrectionui:DockMargin(2, 8, 2, 8)
+        ofmmmdbcolorcorrectionui.DoClick = function()
+            RunConsoleCommand( "ai_show_connect")
         end
 
          
@@ -1524,7 +1709,65 @@ local function of_menu_open( )
     end
 
     local function ofm_dvip()
-        local ofmdviprl = vgui.Create("DButton", ofmpanel)
+        local ofmpanel1 = vgui.Create("DPanel", ofmpanel)
+        ofmpanel1:SetSize(xxp/2, yyp/2)
+        ofmpanel1:Dock(LEFT) 
+        ofmpanel1:DockPadding(2, 2, 2, 8)
+        --ofmpanel1:SetDisabled
+        ofmpanel1.Paint = function(self, w, h)
+            draw.RoundedBox(8, 0, 0, w, h, Color(255, 0, 153, 0))
+        end
+        
+        local ofmpanel2 = vgui.Create("DPanel", ofmpanel)
+        ofmpanel2:SetSize(xxp/2, yyp/2)
+        ofmpanel2:Dock(LEFT)
+        ofmpanel2:DockPadding(2, 2, 2, 8)
+        ofmpanel2.Paint = function(self, w, h)
+            draw.RoundedBox(8, 0, 0, w, h, Color(0, 30, 255, 0))
+        end
+        
+        local ofmdviptext1 = vgui.Create("DLabel", ofmpanel1)
+        ofmdviptext1:Dock(TOP)
+        ofmdviptext1:DockMargin(2, 8, 2, 8)
+        ofmdviptext1:SetText("UI制作")
+        ofmdviptext1:SetFont("oftext")
+        ofmdviptext1:SetTextColor(importanttextcolor)
+
+        local ofmdvipvguidrawfocus = ofmpanel1:Add( "DCheckBoxLabel" )
+        ofmdvipvguidrawfocus:Dock(TOP)
+        ofmdvipvguidrawfocus:DockMargin(2, 4, 2, 4)					
+	    ofmdvipvguidrawfocus:SetText("标注UI元素")
+        ofmdvipvguidrawfocus:SetTextColor(whitetext)
+        ofmdvipvguidrawfocus:SetFont("oftext")				
+	    ofmdvipvguidrawfocus:SetConVar("vgui_drawfocus")									
+	    ofmdvipvguidrawfocus:SizeToContents()
+
+        local ofmdvipvguidrawtree = ofmpanel1:Add( "DCheckBoxLabel" )
+        ofmdvipvguidrawtree:Dock(TOP)
+        ofmdvipvguidrawtree:DockMargin(2, 4, 2, 4)					
+	    ofmdvipvguidrawtree:SetText("显示UI层次树状图")
+        ofmdvipvguidrawtree:SetTextColor(whitetext)
+        ofmdvipvguidrawtree:SetFont("oftext")				
+	    ofmdvipvguidrawtree:SetConVar("vgui_drawtree")
+	    ofmdvipvguidrawtree:SizeToContents()
+
+
+        local ofmdvipshowschemevisualize = vgui.Create("DButton", ofmpanel1)
+        ofmdvipshowschemevisualize:SetText("预览UI字体、边框和颜色")
+        ofmdvipshowschemevisualize:Dock(TOP)
+        ofmdvipshowschemevisualize:DockMargin(2, 8, 2, 8)
+        ofmdvipshowschemevisualize.DoClick = function()
+            RunConsoleCommand( "showschemevisualizer")
+        end
+
+        local ofmdviptext2 = vgui.Create("DLabel", ofmpanel2)
+        ofmdviptext2:Dock(TOP)
+        ofmdviptext2:DockMargin(2, 8, 2, 8)
+        ofmdviptext2:SetText("重要功能")
+        ofmdviptext2:SetFont("oftext")
+        ofmdviptext2:SetTextColor(importanttextcolor)
+
+        local ofmdviprl = vgui.Create("DButton", ofmpanel2)
         ofmdviprl:SetText("重载模组")
         ofmdviprl:Dock(TOP)
         ofmdviprl:DockMargin(2, 8, 2, 8)
@@ -1540,30 +1783,17 @@ local function of_menu_open( )
             end )
         end
 
-        local ofmdviprltext = vgui.Create("DLabel", ofmpanel)
+        local ofmdviprltext = vgui.Create("DLabel", ofmpanel2)
         ofmdviprltext:Dock(TOP)
-        ofmdviprltext:DockMargin(2, 8, 2, 8)
+        ofmdviprltext:DockMargin(2, 4, 2, 4)
         ofmdviprltext:SetText("左键1秒后重载，右键5秒后重载")
         ofmdviprltext:SetTextColor(whitetext)
         ofmdviprltext:SetFont("oftext")
-
-        
-
-
     end
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
     local ofmdvip = vgui.Create("DButton", ofmdv)
-    ofmdvip:SetText("重要功能")
+    ofmdvip:SetText("插件制作")
     ofmdvip:Dock(TOP)
     ofmdvip:DockMargin(0, 0, 0, 0)
     ofmdvip.DoClick = function()
@@ -1733,6 +1963,7 @@ local function of_menu_open( )
         ofmdvipmainhelprichtext2:AppendText("ARC9 Weapon Base \nARC9武器包\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2910505837\n")
         ofmdvipmainhelprichtext2:AppendText("\n[ArcCW] Arctic's Customizable Weapons (Base) \nARCCW武器包\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2131057232\n")
         
+        ofmdvipmainhelprichtext2:AppendText("\nInfinite Ammo \n无限弹药\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=1875143628\n")
         ofmdvipmainhelprichtext2:AppendText("\nMW/WZ Skydive/Parachute + Infil \n战区降落伞\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2635378860\n")
         ofmdvipmainhelprichtext2:AppendText("\nWeapon Editor & Replacer \n武器编辑替换器\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=933160196\n")
         ofmdvipmainhelprichtext2:AppendText("\nArctic's Radial Binds \nARC放射状菜单\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=2391301431\n")
@@ -1809,7 +2040,9 @@ local function of_menu_open( )
         ofmbugreportrichtext2:DockPadding(8, 4, 8, 4)
         ofmbugreportrichtext2:SetSize(xxp, yyp*2/5) 
         ofmbugreportrichtext2:InsertColorChange( 255, 255, 255, 255 )
-        ofmbugreportrichtext2:AppendText("2023.6.28\nnoob7236（B站）\n建议增加关于伤害类的修改\n")
+        ofmbugreportrichtext2:AppendText("2023.8.10\n雪鞋貓（B站）\n建议增加一键开关无限弹药的选项\n")
+        ofmbugreportrichtext2:AppendText("\n2023.7.22\n聚乙烯的氮化物（B站）\n建议增加NPC随机替换TFA武器的选项\n")
+        ofmbugreportrichtext2:AppendText("\n2023.6.28\nnoob7236（B站）\n建议增加关于伤害类的修改\n")
         ofmbugreportrichtext2:AppendText("\n2023.6.27\n斫青客（B站）\n建议增加快捷调整时间流速的指令绑定\n")
         ofmbugreportrichtext2:AppendText("\n2023.6.18\nGlobex（Steam）\n反馈订阅后没法单独隐藏hud的漏洞（已修复）\n反馈受支持但没安装的模组对应的选项在菜单里显示为已开启并没有办法关闭的漏洞（未修复）\n（这个漏洞虽然不影响功能但是容易误导玩家，应当重视）\n反馈工具箱会导致csm失效的漏洞（修复了。。。应该吧）\n建议增加MWB配件保存，NPC死亡人数过多自动后撤，实体爆炸，NPC自相残杀，优化帧数，全亮模式分级，调整NPC透视距离功能\n（建议有些多w(ﾟДﾟ)w某些功能以后再看吧）\n\nXiaoHappyEnd（B站）\n反馈订阅后没法单独隐藏hud的漏洞（已经修复）\n")
         ofmbugreportrichtext2:AppendText("\n2023.6.16\n爱打电动的汁子（B站）\n建议增加NPC替换TFA武器的选项（完成了一半）\n")
@@ -1990,7 +2223,7 @@ end
 concommand.Add( "of_menu", OfMenuToggle )
 
 list.Set("DesktopWindows", "oftoolmenuc", {
-    title = "晦弗工具箱",
+    title = "晦涩弗里曼的工具箱",
     icon = "oftoollogo/oftoollogo.png",
     init = function(icon, window)
         RunConsoleCommand( "of_menu")
