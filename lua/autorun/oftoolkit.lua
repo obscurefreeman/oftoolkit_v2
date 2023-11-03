@@ -9,6 +9,9 @@ AddCSLuaFile()
 2033.2.13
 ]]--
 
+CreateClientConVar( "of_populatetoolmenu", "0",{ FCVAR_REPLICATED, FCVAR_NOTIFY, FCVAR_ARCHIVE }, "" )
+
+
 CreateConVar( "of_god", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--无敌
 CreateConVar( "of_drawwm", "1", 0, "" )		--第三人称模型
 CreateConVar( "of_skybox", "1", 0, "" )		--隐藏地图细节
