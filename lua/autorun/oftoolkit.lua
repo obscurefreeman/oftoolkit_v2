@@ -76,7 +76,7 @@ concommand.Add( "of_removeallweapons", function( ply )	--缴械
 	ply:StripWeapons()
 end )
 
-			game.CleanUpMap()
+
 
 concommand.Add( "of_screenshot", function( ply )	--无损截屏
 	timer.Simple( 2, function() 
@@ -358,12 +358,12 @@ hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 
 	local m = menubar:AddOrGetMenu( "晦弗工具箱V2" )	--主菜单
 	RunConsoleCommand("r_drawvgui" , 1 )
-	m:AddOption("打开晦弗工具箱", function() RunConsoleCommand( "of_menu") end):SetIcon("icon16/wrench_orange.png")
+	m:AddOption("打开晦弗工具箱", function() RunConsoleCommand( "of_menu") end):SetIcon("gui/silkicons/oftoollogo.png")
 	--m:AddOption( "一键隐藏多余元素", function() RunConsoleCommand( "of_hud") end ):SetIcon("icon16/attach.png")
 	m:AddCVar( "显示HUD及多余UI", "of_drawhud", "1", "0" ):SetIcon("icon16/attach.png")
 	
 	m:AddOption( "收拾残局", function() RunConsoleCommand( "of_clean") end ):SetIcon("icon16/cut.png")
-	m:AddOption( "重置地图", function() RunConsoleCommand( "of_cleanup") end ):SetIcon("icon16/arrow_refresh.png")
+	m:AddOption( "重置地图", function() RunConsoleCommand( "of_cleanup") end ):SetIcon("icon16/arrow_refresh_small.png")
 	
 	m:AddSpacer()
 	
@@ -415,7 +415,7 @@ hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 	mwar:SetDeleteSelf( false )
 	mwar:AddCVar( "无敌", "of_god","1","0" )
 	mwar:AddSpacer()
-	mwar:AddOption( "去除自己的武器", function() RunConsoleCommand( "of_removeallweapons") end ):SetIcon( "icon16/wand.png" )
+	mwar:AddOption( "去除自己的武器", function() RunConsoleCommand( "of_removeallweapons") end ):SetIcon( "icon16/gun.png" )
 	mwar:AddOption( "把现在的位置设为出生点", function() RunConsoleCommand( "of_saveasplayerspawn") end ):SetIcon( "icon16/flag_orange.png" )
 	mwar:AddOption( "移除保存的出生点", function() RunConsoleCommand( "of_deleteplayerspawn") end ):SetIcon( "icon16/cross.png" )
 	mwar:AddOption( "保存现在的位置", function() RunConsoleCommand( "of_teleportsave") end ):SetIcon( "icon16/vcard.png" )
