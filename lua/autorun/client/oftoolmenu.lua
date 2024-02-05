@@ -8,19 +8,19 @@ local xxs,yys=xxp/638,yyp/600   --倍率
 
 surface.CreateFont("oftitle", {     --创建字体
     font = "Dream Han Sans CN",
-    extended = false ,
+    extended = true ,
     size = 40*xxs
 })
 
 surface.CreateFont("oftextlarge", {
     font = "Dream Han Sans CN W14",
-    extended = false,
+    extended = true,
     size = 30*xxs
 })
 
 surface.CreateFont("oftext", {
     font = "Dream Han Sans CN W14",
-    extended = false,
+    extended = true,
     size = 20*xxs
 })
 
@@ -37,12 +37,34 @@ local ofbarcolor3 = Color(153, 212, 25, 190)
 local ofbarcolor4 = Color(255, 0, 93, 190)
 local ofbarcolor5 = Color(222, 215, 12, 190)
 local ofbarcolorb1 = Color(255, 255, 255, 156)  --这个暂时没有用
-local ofbarcolor = Color(0, 0, 0, 156)  --这个是现在选项卡的颜色
 local blacktext = Color(0, 0, 0, 207)  --黑色文字（目前没有用到）
 local whitetext = Color(255, 255, 255, 255)  --白色文字
-local importanttextcolor = Color(255, 115, 0, 255)
 
+if file.Exists("oftk_ofbarcolor.txt", "DATA") then
+    local json = file.Read("oftk_ofbarcolor.txt", "DATA") -- 从文件中读取JSON数据
+    local data = util.JSONToTable(json) -- 将JSON数据转换为Lua表
+    
+    if data and data.color then
+        ofbarcolor = data.color -- 获取颜色值
+    else
+        ofbarcolor = Color(72,72,72,255)
+    end
+else
+    ofbarcolor = Color(72,72,72,255)
+end
 
+if file.Exists("oftk_importanttextcolor.txt", "DATA") then
+    local json = file.Read("oftk_importanttextcolor.txt", "DATA") -- 从文件中读取JSON数据
+    local data = util.JSONToTable(json) -- 将JSON数据转换为Lua表
+    
+    if data and data.color then
+        importanttextcolor = data.color -- 获取颜色值
+    else
+        importanttextcolor = Color(255, 115, 0, 255)
+    end
+else
+    importanttextcolor = Color(255, 115, 0, 255)
+end
 
 --                                                                        我发现这玩意不会自动换行，超出边界会显示不出来
 --                                                                        ！这里是文字的边界
@@ -91,28 +113,29 @@ local helpentries = {
     ]]
 }
 
-
-
-
-
-
-
-
-
-
-
+function createcheckbox(panel,text,convar)
+    local checkbox = panel:Add( "DCheckBoxLabel" )
+    checkbox:Dock(TOP)
+    checkbox:DockMargin(2, 4, 2, 4)						
+    checkbox:SetText(text)
+    checkbox:SetTextColor(whitetext)
+    checkbox:SetFont("oftext")			
+    checkbox:SetConVar(convar)										
+    checkbox:SizeToContents()
+end
 
 //if of_menu then of_menu:Remove() end    --菜单主体
 //of_menu=nil 
 local function of_menu_open( )
     //if of_menu then of_menu:Remove()end
-    local of_menu = vgui.Create("DFrame")
+    of_menu = vgui.Create("DFrame")
     of_menu:SetSize(800*xx, 600*yy)
     of_menu:Center()
-    of_menu:SetTitle("晦涩弗里曼的工具箱V2.2.0")
+    of_menu:SetTitle("晦涩弗里曼的工具箱V2.2.2")
+    -- of_menu:SetSkin("ofminigamestheme")
     of_menu:SetDraggable(true)
     of_menu:MakePopup()
-    of_menu:SetSizable(true)
+    of_menu:SetSizable(false)
     of_menu:SetKeyboardInputEnabled( false )
     surface.PlaySound("of_ui/ui_click_confirm1.wav")
     function of_menu :OnClose()
@@ -215,6 +238,8 @@ local function of_menu_open( )
     ofmwellcomeud:DockPadding(8, 4, 8, 4)
     ofmwellcomeud:SetSize(xxp, yyp/3) 
     ofmwellcomeud:InsertColorChange( 255, 255, 255, 255 )
+    ofmwellcomeud:AppendText("2024.2.5 \n中型更新，增加了全局状态，修复了颜色主题。现在你设置的主题可以保存了！\n")
+    ofmwellcomeud:AppendText("2024.1.22 \n紧急修复，近日，我的工具箱由于官方更新，导致了很多问题。具体表现为1，VJ Base的清除功能被破坏。2，地图中自带或自己摆的可破坏物件被击碎后会在原地留下虚影。3，某些实体或面板没法被正常清除。（卧槽排查了半天原来是自家模组出了问题，还以为是我代码写错了，一上午的代码都白写了）4，游戏重载后会直接崩溃。目前这些问题已经修复，调查结果为官方January 2024 Patch 2更新诱发了远古遗留的错误代码。如果本次紧急更新后仍有问题存在，请让我知道。\n")
     ofmwellcomeud:AppendText("2023.9.22 \n小型更新，增加了修改服务器游戏设置的功能\n（你可以直接在游戏里调整服务器的设置，不用担心开始游戏的时候勾选错了），\n模组支持新增无限子弹一键开关！\n此外，开发者可以使用的工具也增加了，可以一键显示材质开销，列出界面UI元素\n部分界面经过调整，使用舒适度增加\n")
     ofmwellcomeud:AppendText("2023.9.12 \n我的《异形丛生》地图发布了！用俯视射击游戏打CSGO地图是什么样的呢？\n进创意工坊搜：[Deathmatch]Lake from csgo\n")
     ofmwellcomeud:AppendText("2023.7.10 \n中型更新，增加了覆写玩家血量,自动回血，杀敌回血的功能\n并且现在没有挂载的模组会提示未挂载\n（这个功能可能会引起未知bug，如果在游戏里发现相关问题，请及时汇报）\n此外，新地图光华高中周年纪念版现已推出！请前往创意工坊下载！\n")
@@ -1144,6 +1169,25 @@ local function of_menu_open( )
         ofmwarserversbox_bonemanip_misc:SetFont("oftext")			
 	    ofmwarserversbox_bonemanip_misc:SetConVar("sbox_bonemanip_misc")										
 	    ofmwarserversbox_bonemanip_misc:SizeToContents()
+
+        local ofmwarservert3 = vgui.Create("DLabel", ofmpanel2)
+        ofmwarservert3:Dock(TOP)
+        ofmwarservert3:DockMargin(2, 8, 2, 8)
+        ofmwarservert3:SetText("全局状态")
+        ofmwarservert3:SetFont("oftext")
+        ofmwarservert3:SetTextColor(importanttextcolor)
+
+        createcheckbox(ofmpanel2,"蚁狮是盟友","ofgs_antlion_allied")
+        createcheckbox(ofmpanel2,"关闭HEV冲刺功能","ofgs_suit_no_sprint")
+        createcheckbox(ofmpanel2,"启用超级重力枪","ofgs_super_phys_gun")
+        createcheckbox(ofmpanel2,"遇到友军时武器降低","ofgs_friendly_encounter")
+        createcheckbox(ofmpanel2,"所有玩家都是无敌的","ofgs_gordon_invulnerable")
+        createcheckbox(ofmpanel2,"不要在吉普车上生成海鸥","ofgs_no_seagulls_on_jeep")
+        createcheckbox(ofmpanel2,"爱莉克斯受伤，无法战斗（EP2）","ofgs_ep2_alyx_injured")
+        createcheckbox(ofmpanel2,"NPC开启黑暗模式（EP1）","ofgs_ep_alyx_darknessmode")
+        createcheckbox(ofmpanel2,"狩猎者在躲开前跑过来","ofgs_hunters_to_run_over")
+        createcheckbox(ofmpanel2,"市民不能被玩家命令","ofgs_citizens_passive")
+
     end
 
 
@@ -1789,6 +1833,14 @@ local function of_menu_open( )
         ofmdviprltext:SetText("左键1秒后重载，右键5秒后重载")
         ofmdviprltext:SetTextColor(whitetext)
         ofmdviprltext:SetFont("oftext")
+
+        local ofmdviprlsm = vgui.Create("DButton", ofmpanel2)
+        ofmdviprlsm:SetText("重载Q键菜单")
+        ofmdviprlsm:Dock(TOP)
+        ofmdviprlsm:DockMargin(2, 8, 2, 8)
+        ofmdviprlsm.DoClick = function()
+            RunConsoleCommand( "spawnmenu_reload" ) 
+        end
     end
     
     
@@ -2098,7 +2150,7 @@ local function of_menu_open( )
         ofmcb:Dock(TOP)
         ofmcb:DockPadding(2, 8, 2, 8)
         ofmcb:SetText("")
-        ofmcb:SetColor( Color(0,0,0,255))
+        ofmcb:SetColor( ofbarcolor)
         --ofmcb:SetColor( Color(0, 0, 0, 156) )
 
         --function ofmcb :DoClick()
@@ -2106,7 +2158,9 @@ local function of_menu_open( )
         --end
 
         function ofmcb :DoRightClick()
-            ofbarcolor = Color(0, 0, 0, 156)
+            ofbarcolor = Color(72,72,72,255)
+            ofm_clear()
+            ofm_cs()
         end
 
         local ofmctext = vgui.Create("DLabel", ofmcb)
@@ -2121,6 +2175,9 @@ local function of_menu_open( )
             ofmcb:SetColor( value )
             function ofmcb :DoClick()
                 ofbarcolor = value
+                local data = { color = value }
+                local json = util.TableToJSON(data)
+                file.Write("oftk_ofbarcolor.txt", json)
             end
         end
 
@@ -2166,15 +2223,19 @@ local function of_menu_open( )
                 importanttextcolor = value
                 ofm_clear()
                 ofm_cs()
+                local data = { color = value }
+                local json = util.TableToJSON(data)
+                file.Write("oftk_importanttextcolor.txt", json)
             end
         end
 
-        local ofmcs3 = vgui.Create("DLabel", ofmcs)
-        ofmcs3:Dock(TOP)
-        ofmcs3:DockMargin(2, 8, 2, 8)
-        ofmcs3:SetText("这只是一个测试功能，目前颜色主题不能保存。")
-        ofmcs3:SetFont("oftext")
-        ofmcs3:SetTextColor(whitetext)
+        -- 现在可以了
+        -- local ofmcs3 = vgui.Create("DLabel", ofmcs)
+        -- ofmcs3:Dock(TOP)
+        -- ofmcs3:DockMargin(2, 8, 2, 8)
+        -- ofmcs3:SetText("这只是一个测试功能，目前颜色主题不能保存。")
+        -- ofmcs3:SetFont("oftext")
+        -- ofmcs3:SetTextColor(whitetext)
 
         -- local ofmcfb = vgui.Create( "DNumSlider", ofmpanel )
         -- ofmcfb:Dock(TOP)

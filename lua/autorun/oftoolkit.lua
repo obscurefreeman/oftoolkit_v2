@@ -353,6 +353,9 @@ hook.Add("PlayerTick", "of_drawtp", function( ply )	--第三人称模型之控�
 	end
 end )
 ]]--
+
+
+
 --！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 
@@ -517,6 +520,7 @@ hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 
 	mdv:SetDeleteSelf( false )
 	mdv:AddOption( "重载模组" , function() RunConsoleCommand( "of_reload") end ):SetIcon( "icon16/arrow_refresh.png" )
+	mdv:AddOption( "重载Q键菜单" , function() RunConsoleCommand( "spawnmenu_reload") end ):SetIcon( "icon16/arrow_refresh.png" )
 	mdv:AddOption( "控制台列出绑键", function() RunConsoleCommand( "key_listboundkeys" )  end ):SetIcon( "icon16/application_xp_terminal.png" )
 	mdv:AddCVar( "使用多核渲染", "Gmod_mcore_test", "1", "0" )
 
