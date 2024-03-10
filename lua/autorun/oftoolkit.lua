@@ -12,7 +12,7 @@ AddCSLuaFile()
 CreateClientConVar( "of_populatetoolmenu", "0",{ FCVAR_REPLICATED, FCVAR_NOTIFY, FCVAR_ARCHIVE }, "" )
 
 
-CreateConVar( "of_god", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--无敌
+-- CreateConVar( "of_god", "0",{ FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" )		--无敌
 CreateConVar( "of_drawwm", "1", 0, "" )		--第三人称模型
 CreateConVar( "of_skybox", "1", 0, "" )		--隐藏地图细节
 CreateConVar( "of_drawhud", "1", 0, "" )	--显示多余元素
@@ -153,12 +153,12 @@ end)
 
 hook.Add("PlayerSpawn", "of_spawngodhook", function( ply ) --无敌3秒
 	
-	if( GetConVarNumber( "of_god" ) == 1 ) then return end
+	if( GetConVarNumber( "sbox_godmode" ) == 1 ) then return end
 
 	if( GetConVarNumber( "of_spawngod" ) == 1 ) then
-		RunConsoleCommand( "of_god","1" ) 
+		RunConsoleCommand( "sbox_godmode","1" ) 
 		timer.Simple( 3, function() 
-			RunConsoleCommand( "of_god","0" ) 
+			RunConsoleCommand( "sbox_godmode","0" ) 
 		end )
 		
 		
@@ -216,27 +216,20 @@ hook.Add("PlayerDeath", "of_explodafterdeathhook", function(ply)  --死后爆炸
 end)
 
 
+-- hook.Add("PlayerTick", "of_important1", function( ply )  --第三人称武器&无敌都在这里！！！！！！！！！
+-- 	if ( SERVER ) then 
+-- 		if GetConVar( "of_drawwm" ):GetInt() != OF_DRAWwM then
+-- 			local OF_DRAWwM = GetConVar( "of_drawwm" ):GetInt()
+-- 			ply:DrawWorldModel( OF_DRAWwM ) 
+-- 		end
 
-
-
-
-
-concommand.Add( "of_fase", function( ply )	--选中脸
-	ply:GetTool("faceposer"):SetFacePoserEntity( ply )
-	RunConsoleCommand( "gmod_tool", "faceposer" )
-end )
-
-
-hook.Add("PlayerTick", "of_important1", function( ply )  --第三人称武器&无敌都在这里！！！！！！！！！
-	if ( SERVER ) then 
-	ply:DrawWorldModel( GetConVarNumber( "of_drawwm" ) == 1 ) 
-		if GetConVarNumber( "of_god" ) == 1 then
-			ply:GodEnable()
-		else
-			ply:GodDisable()
-		end	
-	end
-end)
+-- 		if GetConVarNumber( "of_god" ) == 1 then
+-- 			ply:GodEnable()
+-- 		else
+-- 			ply:GodDisable()
+-- 		end
+-- 	end
+-- end)
 
 hook.Add("PlayerTick", "of_thirdpersonhook", function( ply ) 
 	if( GetConVarNumber( "of_thirdperson" ) == 1 ) then
@@ -416,7 +409,7 @@ hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 	mwarOption:SetIcon( "icon16/bomb.png" )
 	
 	mwar:SetDeleteSelf( false )
-	mwar:AddCVar( "无敌", "of_god","1","0" )
+	mwar:AddCVar( "全玩家无敌", "sbox_godmode","1","0" )
 	mwar:AddSpacer()
 	mwar:AddOption( "去除自己的武器", function() RunConsoleCommand( "of_removeallweapons") end ):SetIcon( "icon16/gun.png" )
 	mwar:AddOption( "把现在的位置设为出生点", function() RunConsoleCommand( "of_saveasplayerspawn") end ):SetIcon( "icon16/flag_orange.png" )
