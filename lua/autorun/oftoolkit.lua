@@ -467,6 +467,7 @@ hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 
 	mm:AddCVar( "线框模式", "mat_wireframe", "3", "0" )
 	mm:AddCVar( "显示实时帧数", "cl_showfps", "1", "0" )
+	mm:AddCVar( "显示玩家的地图坐标和移动速度", "cl_showpos", "1", "0" )
 	mm:AddCVar( "显示地图实体与输入/输出*", "sv_drawmapio", "1", "0" )
 
 	mm:AddSpacer()
@@ -514,7 +515,10 @@ hook.Add( "PopulateMenuBar", "oftoolkit", function( menubar )
 	mdv:SetDeleteSelf( false )
 	mdv:AddOption( "重载模组" , function() RunConsoleCommand( "of_reload") end ):SetIcon( "icon16/arrow_refresh.png" )
 	mdv:AddOption( "重载Q键菜单" , function() RunConsoleCommand( "spawnmenu_reload") end ):SetIcon( "icon16/arrow_refresh.png" )
+	mdv:AddOption( "重载声音" , function() RunConsoleCommand( "snd_restart") end ):SetIcon( "icon16/arrow_refresh.png" )
 	mdv:AddOption( "控制台列出绑键", function() RunConsoleCommand( "key_listboundkeys" )  end ):SetIcon( "icon16/application_xp_terminal.png" )
+	mdv:AddOption( "控制台列出地图和连接状态", function() RunConsoleCommand( "status" )  end ):SetIcon( "icon16/application_xp_terminal.png" )
+	mdv:AddOption( "打开Demo菜单", function() RunConsoleCommand( "demoui" )  end ):SetIcon( "icon16/application_xp_terminal.png" )
 	mdv:AddCVar( "使用多核渲染", "Gmod_mcore_test", "1", "0" )
 
 	m:AddSpacer()

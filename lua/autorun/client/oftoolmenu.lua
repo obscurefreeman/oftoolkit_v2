@@ -1110,6 +1110,15 @@ local function of_menu_open( )
 	    ofmwarservermp_falldamage:SetConVar("mp_falldamage")										
 	    ofmwarservermp_falldamage:SizeToContents()
 
+        local ofmwarservergravity = vgui.Create( "DNumSlider", ofmpanel1 )
+        ofmwarservergravity:Dock(TOP)
+        ofmwarservergravity:DockMargin(2, 2, 2, 2)
+        ofmwarservergravity:SetText("服务器重力" )
+        ofmwarservergravity:SetMin( 0 )
+        ofmwarservergravity:SetMax( 1000 )
+        ofmwarservergravity:SetDecimals( 0 )
+        ofmwarservergravity:SetConVar( "sv_gravity" )
+
         local ofmwarservert2 = vgui.Create("DLabel", ofmpanel1)
         ofmwarservert2:Dock(TOP)
         ofmwarservert2:DockMargin(2, 8, 2, 8)
@@ -1492,14 +1501,29 @@ local function of_menu_open( )
             RunConsoleCommand( "colorcorrectionui")
         end
 
-        local ofmmmdbcolorcorrectionui = vgui.Create("DButton", ofmpanel1)
-        ofmmmdbcolorcorrectionui:SetText("显示AI路点")
-        ofmmmdbcolorcorrectionui:Dock(TOP)
-        ofmmmdbcolorcorrectionui:DockMargin(2, 8, 2, 8)
-        ofmmmdbcolorcorrectionui.DoClick = function()
+        local ofmmmdbaishowconnect = vgui.Create("DButton", ofmpanel1)
+        ofmmmdbaishowconnect:SetText("显示AI路点")
+        ofmmmdbaishowconnect:Dock(TOP)
+        ofmmmdbaishowconnect:DockMargin(2, 8, 2, 8)
+        ofmmmdbaishowconnect.DoClick = function()
             RunConsoleCommand( "ai_show_connect")
         end
 
+        local ofmmmdbainodes = vgui.Create("DButton", ofmpanel1)
+        ofmmmdbainodes:SetText("显示AI导航网格")
+        ofmmmdbainodes:Dock(TOP)
+        ofmmmdbainodes:DockMargin(2, 8, 2, 8)
+        ofmmmdbainodes.DoClick = function()
+            RunConsoleCommand( "ai_nodes")
+        end
+
+        local ofmmmdbaishowhull = vgui.Create("DButton", ofmpanel1)
+        ofmmmdbaishowhull:SetText("显示AI路径规划")
+        ofmmmdbaishowhull:Dock(TOP)
+        ofmmmdbaishowhull:DockMargin(2, 8, 2, 8)
+        ofmmmdbaishowhull.DoClick = function()
+            RunConsoleCommand( "ai_show_hull")
+        end
          
 
         
@@ -1841,6 +1865,14 @@ local function of_menu_open( )
         ofmdviprlsm:DockMargin(2, 8, 2, 8)
         ofmdviprlsm.DoClick = function()
             RunConsoleCommand( "spawnmenu_reload" ) 
+        end
+
+        local ofmdviprsnd = vgui.Create("DButton", ofmpanel2)
+        ofmdviprsnd:SetText("重载声音")
+        ofmdviprsnd:Dock(TOP)
+        ofmdviprsnd:DockMargin(2, 8, 2, 8)
+        ofmdviprsnd.DoClick = function()
+            RunConsoleCommand( "snd_restart" ) 
         end
     end
     
